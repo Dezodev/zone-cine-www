@@ -1,59 +1,111 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Zone Ciné
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Agrégateur cinéma francophone — films, séries, plateformes streaming.
+Construit avec Laravel 12 + MySQL + Redis.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Prérequis
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- PHP 8.3+
+- MySQL / MariaDB
+- Redis
+- Composer
+- Un compte TMDB avec un **API Read Access Token** (Bearer)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## Installation
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+```bash
+composer install
+cp .env.example .env
+php artisan key:generate
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Configurer la base de données et Redis dans `.env`, puis :
 
-## Laravel Sponsors
+```bash
+php artisan migrate
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+---
 
-### Premium Partners
+## Configuration TMDB
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+Dans `.env`, renseigner le token TMDB (Bearer) :
 
-## Contributing
+```env
+TMDB_API_TOKEN=eyJhbGciOiJIUzI1NiJ9...
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Le token est disponible dans les paramètres du compte TMDB → **API → API Read Access Token**.
 
-## Code of Conduct
+---
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Import du catalogue TMDB
 
-## Security Vulnerabilities
+### Import initial via les exports journaliers
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+TMDB publie chaque nuit des fichiers contenant tous les IDs de leur base.
+La commande les télécharge, les lit en streaming et dispatche un job par titre.
 
-## License
+```bash
+# Films (popularité ≥ 10, ~80-100k titres)
+php artisan tmdb:import-export --type=movies --min-popularity=10
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+# Séries
+php artisan tmdb:import-export --type=tv --min-popularity=10
+```
+
+**Options disponibles**
+
+| Option | Défaut | Description |
+|---|---|---|
+| `--type` | `movies` | `movies` ou `tv` |
+| `--min-popularity` | `10` | Score de popularité TMDB minimum |
+| `--date` | hier | Date de l'export au format `MM_DD_YYYY` |
+| `--dry-run` | — | Compte les entrées sans dispatcher les jobs |
+
+```bash
+# Simuler sans importer
+php artisan tmdb:import-export --type=movies --dry-run
+
+# Importer un export spécifique
+php artisan tmdb:import-export --type=movies --date=03_29_2026
+```
+
+### Workers (à configurer dans Supervisor)
+
+Les jobs sont placés sur la queue `tmdb-import`. Lancer un ou plusieurs workers :
+
+```bash
+php artisan queue:work redis --queue=tmdb-import --sleep=3 --tries=3 --max-jobs=500
+```
+
+> `--max-jobs=500` redémarre le worker toutes les 500 jobs pour éviter les fuites mémoire lors d'un import massif.
+> Avec plusieurs workers en parallèle, l'import de ~100k films prend quelques heures (limité par le rate limit TMDB ≈ 40 req/s sur le plan gratuit).
+
+### Synchro quotidienne automatique
+
+Un job planifié tourne chaque nuit à 3h pour maintenir les populaires, les films à l'affiche et les prochaines sorties à jour :
+
+```bash
+# S'assurer que le scheduler Laravel tourne (cron sur le VPS)
+* * * * * cd /path/to/project && php artisan schedule:run >> /dev/null 2>&1
+```
+
+---
+
+## Routes
+
+| URL | Description |
+|---|---|
+| `/` | Accueil — à l'affiche, à venir, séries populaires |
+| `/films` | Catalogue films (filtres : genre, année, langue, tri) |
+| `/films/{slug}` | Fiche film |
+| `/series` | Catalogue séries |
+| `/series/{slug}` | Fiche série |
+| `/personnes/{slug}` | Fiche acteur / réalisateur |
+| `/genre/films/{slug}` | Films par genre |
+| `/genre/series/{slug}` | Séries par genre |
