@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zone Ciné — Bientôt en ligne</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;600&display=swap');
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --gold: #e8c84a;
+      --red: #c0392b;
+      --dark: #0a0a0a;
+      --dark-mid: #141414;
+      --dark-light: #1e1e1e;
+      --text: #f0f0f0;
+      --text-muted: #888;
+    }
+
+    body {
+      background-color: var(--dark);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Film strip top & bottom */
+    .filmstrip {
+      position: fixed;
+      left: 0;
+      right: 0;
+      height: 52px;
+      background: #111;
+      display: flex;
+      align-items: center;
+      z-index: 10;
+    }
+    .filmstrip--top { top: 0; }
+    .filmstrip--bottom { bottom: 0; }
+
+    .filmstrip__holes {
+      display: flex;
+      gap: 0;
+      width: 100%;
+    }
+
+    .filmstrip__hole {
+      flex-shrink: 0;
+      width: 32px;
+      height: 28px;
+      background: var(--dark);
+      border-radius: 4px;
+      margin: 0 8px;
+    }
+
+    /* Scanline overlay */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent 0px,
+        transparent 3px,
+        rgba(0,0,0,0.08) 3px,
+        rgba(0,0,0,0.08) 4px
+      );
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    /* Spotlight vignette */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 50%, transparent 30%, rgba(0,0,0,0.75) 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Main content */
+    .container {
+      text-align: center;
+      padding: 80px 24px;
+      position: relative;
+      z-index: 2;
+      max-width: 680px;
+    }
+
+    .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4rem, 12vw, 8rem);
+      letter-spacing: 0.05em;
+      line-height: 1;
+      color: var(--text);
+      text-shadow: 0 0 40px rgba(232, 200, 74, 0.3);
+    }
+
+    .logo span {
+      color: var(--gold);
+    }
+
+    .clapperboard {
+      font-size: 3.5rem;
+      margin: 24px 0 16px;
+      display: block;
+      animation: flicker 4s infinite;
+    }
+
+    @keyframes flicker {
+      0%, 95%, 100% { opacity: 1; }
+      96% { opacity: 0.4; }
+      97% { opacity: 1; }
+      98% { opacity: 0.6; }
+      99% { opacity: 1; }
+    }
+
+    .tagline {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1rem, 3vw, 1.4rem);
+      letter-spacing: 0.3em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    .divider {
+      width: 60px;
+      height: 2px;
+      background: var(--red);
+      margin: 0 auto 28px;
+    }
+
+    .message {
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--text-muted);
+      line-height: 1.8;
+      max-width: 480px;
+      margin: 0 auto 40px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--dark-light);
+      border: 1px solid #2a2a2a;
+      border-radius: 4px;
+      padding: 12px 24px;
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+    }
+
+    .badge::before {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: var(--red);
+      border-radius: 50%;
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    .domain {
+      margin-top: 48px;
+      font-size: 0.8rem;
+      color: #444;
+      letter-spacing: 0.15em;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Film strip top -->
+  <div class="filmstrip filmstrip--top">
+    <div class="filmstrip__holes" id="holes-top"></div>
+  </div>
+
+  <!-- Film strip bottom -->
+  <div class="filmstrip filmstrip--bottom">
+    <div class="filmstrip__holes" id="holes-bottom"></div>
+  </div>
+
+  <div class="container">
+    <div class="logo">Zone<span>Ciné</span></div>
+
+    <span class="clapperboard">🎬</span>
+
+    <p class="tagline">Le cinéma s'invite bientôt ici</p>
+
+    <div class="divider"></div>
+
+    <p class="message">
+      Notre site est en cours de production. Nous travaillons en coulisses pour
+      vous offrir la meilleure expérience cinéma du web francophone.
+      Revenez nous voir prochainement.
+    </p>
+
+    <div class="badge">
+      En cours de production
+    </div>
+
+    <p class="domain">zone-cine.fr</p>
+  </div>
+
+  <script>
+    // Generate film strip holes dynamically
+    function fillHoles(id) {
+      const container = document.getElementById(id);
+      const count = Math.ceil(window.innerWidth / 48) + 2;
+      container.innerHTML = '';
+      for (let i = 0; i < count; i++) {
+        const hole = document.createElement('div');
+        hole.className = 'filmstrip__hole';
+        container.appendChild(hole);
+      }
+    }
+    fillHoles('holes-top');
+    fillHoles('holes-bottom');
+    window.addEventListener('resize', () => {
+      fillHoles('holes-top');
+      fillHoles('holes-bottom');
+    });
+  </script>
+
+</body>
+</html>
