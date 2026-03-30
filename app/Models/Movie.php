@@ -5,6 +5,36 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
+/**
+ * @property int                                                               $id
+ * @property int                                                               $tmdb_id           Identifiant TMDB du film
+ * @property string|null                                                       $imdb_id           Identifiant IMDb (ex: tt0468569)
+ * @property string                                                            $title             Titre en français
+ * @property string                                                            $original_title    Titre original
+ * @property string                                                            $slug              Slug URL
+ * @property string|null                                                       $overview          Synopsis
+ * @property string|null                                                       $tagline           Accroche du film
+ * @property string|null                                                       $poster_path       Chemin de l'affiche (TMDB)
+ * @property string|null                                                       $backdrop_path     Chemin de l'image de fond (TMDB)
+ * @property \Illuminate\Support\Carbon|null                                   $release_date      Date de sortie
+ * @property int|null                                                          $runtime           Durée en minutes
+ * @property string|null                                                       $original_language Code langue ISO 639-1 (ex: en, fr)
+ * @property string|null                                                       $status            Statut (Released, In Production…)
+ * @property float                                                             $vote_average      Note moyenne TMDB (0-10)
+ * @property int                                                               $vote_count        Nombre de votes TMDB
+ * @property float                                                             $popularity        Score de popularité TMDB
+ * @property int                                                               $budget            Budget en dollars
+ * @property int                                                               $revenue           Recettes mondiales en dollars
+ * @property bool                                                              $adult             Film pour adultes
+ * @property \Illuminate\Support\Carbon                                        $created_at
+ * @property \Illuminate\Support\Carbon                                        $updated_at
+ *
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Genre>         $genres         Genres du film
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Person>        $cast           Acteurs (pivot character, order)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Person>        $crew           Équipe technique (pivot department, job)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Person>        $directors      Réalisateurs uniquement
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, WatchProvider> $watchProviders Plateformes de streaming FR (pivot type)
+ */
 class Movie extends Model
 {
     protected $fillable = [

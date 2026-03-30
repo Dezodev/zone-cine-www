@@ -5,6 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
+/**
+ * @property int                                                          $id
+ * @property int                                                          $tmdb_id    Identifiant TMDB du fournisseur
+ * @property string                                                       $name       Nom de la plateforme (ex: Netflix, Canal+)
+ * @property string|null                                                  $logo_path  Chemin du logo (TMDB)
+ *
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Movie>   $movies    Films disponibles, pivot type (flatrate/rent/buy/free)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, TvShow>  $tvShows   Séries disponibles, pivot type (flatrate/rent/buy/free)
+ */
 class WatchProvider extends Model
 {
     public $timestamps = false;
