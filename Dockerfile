@@ -11,7 +11,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # Extensions système + PHP
 RUN apt-get update && apt-get install -y --no-install-recommends \
-        git curl zip unzip nano cron \
+        git curl zip unzip nano cron supervisor \
         libpng-dev libonig-dev libxml2-dev libzip-dev libicu-dev \
         libcurl4-openssl-dev libjpeg-dev libfreetype6-dev \
         jpegoptim optipng gifsicle \
@@ -51,6 +51,9 @@ RUN chmod 0644 /etc/cron.d/laravel-scheduler && crontab /etc/cron.d/laravel-sche
 
 # Permissions
 RUN usermod -u ${WWWUSER} www-data && groupmod -g ${WWWGROUP} www-data
+
+# Supervisor
+COPY .docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 COPY .docker/entrypoint.sh /usr/local/bin/entrypoint
 RUN chmod +x /usr/local/bin/entrypoint
