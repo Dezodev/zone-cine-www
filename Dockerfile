@@ -46,9 +46,9 @@ COPY .docker/apache/default.conf /etc/apache2/sites-available/000-default.conf
 # PHP
 COPY .docker/php.ini /usr/local/etc/php/conf.d/99-app.ini
 
-# Cron (Laravel scheduler)
+# Cron (Laravel scheduler) — déposé dans /etc/cron.d/, lu nativement par le daemon
 COPY .docker/crontab /etc/cron.d/laravel-scheduler
-RUN chmod 0644 /etc/cron.d/laravel-scheduler && crontab /etc/cron.d/laravel-scheduler
+RUN chmod 0644 /etc/cron.d/laravel-scheduler
 
 # Permissions
 RUN usermod -u ${WWWUSER} www-data && groupmod -g ${WWWGROUP} www-data
