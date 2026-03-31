@@ -14,6 +14,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         git curl zip unzip nano cron supervisor \
         libpng-dev libonig-dev libxml2-dev libzip-dev libicu-dev \
         libcurl4-openssl-dev libjpeg-dev libfreetype6-dev \
+        libmagickwand-dev \
         jpegoptim optipng gifsicle \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install \
