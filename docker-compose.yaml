@@ -22,8 +22,6 @@ services:
     depends_on:
       redis:
         condition: service_healthy
-    networks:
-      - scoobydoo
 
   # -------------------------------------------------------------------------
   # Redis (cache + queues)
@@ -34,8 +32,6 @@ services:
     restart: unless-stopped
     volumes:
       - redis-data:/data
-    networks:
-      - scoobydoo
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       retries: 3
@@ -45,6 +41,8 @@ services:
 volumes:
   redis-data:
 
+
 networks:
-  scoobydoo:
+  default:
     external: true
+    name: scoobydoo
