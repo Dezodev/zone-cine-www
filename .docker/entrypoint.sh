@@ -21,6 +21,14 @@ if grep -q "^APP_KEY=$" .env; then
     php artisan key:generate --no-interaction
 fi
 
+# Vérifier les variables obligatoires
+for var in DB_HOST DB_DATABASE DB_USERNAME DB_PASSWORD; do
+    if [ -z "${!var}" ]; then
+        echo "[entrypoint] ERREUR : la variable \$${var} est vide. Vérifiez votre .env."
+        exit 1
+    fi
+done
+
 # Attendre MySQL
 echo "[entrypoint] Attente de MySQL (${DB_HOST}:${DB_PORT:-3306})..."
 until php -r "new PDO('mysql:host=${DB_HOST};port=${DB_PORT:-3306}', '${DB_USERNAME}', '${DB_PASSWORD}');" 2>/dev/null; do
