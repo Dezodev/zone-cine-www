@@ -1,11 +1,485 @@
 @import 'tailwindcss';
+@plugin 'daisyui' {
+  themes: false;
+}
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 @source '../**/*.blade.php';
 @source '../**/*.js';
 
-@theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+/* =========================================================================
+   THEME
+   ========================================================================= */
+
+[data-theme='zone-cine'] {
+  color-scheme: dark;
+  --color-base-100: oklch(5% 0 0);
+  --color-base-200: oklch(10% 0 0);
+  --color-base-300: oklch(15% 0 0);
+  --color-base-content: oklch(95% 0 0);
+  --color-primary: oklch(82% 0.17 90);     /* gold */
+  --color-primary-content: oklch(15% 0 0);
+  --color-secondary: oklch(44% 0.19 25);   /* rouge cinéma */
+  --color-secondary-content: oklch(95% 0 0);
+  --color-neutral: oklch(20% 0 0);
+  --color-neutral-content: oklch(80% 0 0);
+  --color-info: oklch(60% 0.15 230);
+  --color-success: oklch(60% 0.15 150);
+  --color-warning: oklch(75% 0.18 80);
+  --color-error: oklch(55% 0.2 25);
+  --radius-box: 0.5rem;
+  --radius-btn: 0.375rem;
+}
+
+/* =========================================================================
+   BASE
+   ========================================================================= */
+
+@layer base {
+  html {
+    @apply antialiased;
+  }
+
+  body {
+    @apply bg-base-100 text-base-content min-h-screen flex flex-col;
+  }
+
+  img {
+    @apply max-w-full;
+  }
+
+  a {
+    @apply transition-colors duration-150;
+  }
+}
+
+/* =========================================================================
+   SITE HEADER
+   ========================================================================= */
+
+@layer components {
+  .site-header {
+    @apply navbar bg-base-200 border-b border-base-300 sticky top-0 z-50 px-4 lg:px-8;
+  }
+
+  .site-header__logo {
+    @apply font-black text-xl tracking-tight text-base-content no-underline;
+  }
+
+  .site-header__logo span {
+    @apply text-primary;
+  }
+
+  .site-header__nav {
+    @apply hidden md:flex gap-1;
+  }
+
+  .site-header__nav-link {
+    @apply btn btn-ghost btn-sm text-base-content/70 hover:text-base-content font-normal;
+  }
+
+  .site-header__nav-link--active {
+    @apply text-primary;
+  }
+
+  .site-header__actions {
+    @apply flex items-center gap-2;
+  }
+
+  .site-header__search-btn {
+    @apply btn btn-ghost btn-sm btn-circle;
+  }
+
+  .site-header__mobile-btn {
+    @apply btn btn-ghost btn-sm btn-circle md:hidden;
+  }
+
+  /* =========================================================================
+     SITE FOOTER
+     ========================================================================= */
+
+  .site-footer {
+    @apply bg-base-200 border-t border-base-300 mt-auto py-8 px-4 lg:px-8;
+  }
+
+  .site-footer__inner {
+    @apply max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4;
+  }
+
+  .site-footer__logo {
+    @apply font-black text-lg text-base-content;
+  }
+
+  .site-footer__logo span {
+    @apply text-primary;
+  }
+
+  .site-footer__credits {
+    @apply text-sm text-base-content/40;
+  }
+
+  /* =========================================================================
+     PAGE HERO
+     ========================================================================= */
+
+  .page-hero {
+    @apply relative min-h-[70vh] flex items-end overflow-hidden;
+  }
+
+  .page-hero__backdrop {
+    @apply absolute inset-0 w-full h-full object-cover;
+  }
+
+  .page-hero__overlay {
+    @apply absolute inset-0 bg-gradient-to-t from-base-100 via-base-100/70 to-transparent;
+  }
+
+  .page-hero__content {
+    @apply relative z-10 max-w-2xl px-6 pb-14 lg:px-12;
+  }
+
+  .page-hero__label {
+    @apply badge badge-secondary mb-3 uppercase tracking-widest text-xs font-bold;
+  }
+
+  .page-hero__title {
+    @apply text-4xl lg:text-5xl font-black leading-tight mb-3;
+  }
+
+  .page-hero__meta {
+    @apply flex flex-wrap items-center gap-3 text-sm text-base-content/60 mb-4;
+  }
+
+  .page-hero__overview {
+    @apply text-base-content/80 text-base leading-relaxed mb-6 line-clamp-3;
+  }
+
+  .page-hero__actions {
+    @apply flex gap-3 flex-wrap;
+  }
+
+  /* =========================================================================
+     SECTION
+     ========================================================================= */
+
+  .section {
+    @apply py-10 px-4 lg:px-8;
+  }
+
+  .section__inner {
+    @apply max-w-7xl mx-auto;
+  }
+
+  .section__header {
+    @apply flex items-baseline justify-between mb-6;
+  }
+
+  .section__title {
+    @apply text-xl font-bold;
+  }
+
+  .section__link {
+    @apply text-sm text-primary hover:underline;
+  }
+
+  /* =========================================================================
+     MEDIA GRID
+     ========================================================================= */
+
+  .media-grid {
+    @apply grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4;
+  }
+
+  .media-grid--wide {
+    @apply xl:grid-cols-5;
+  }
+
+  .media-scroll {
+    @apply flex gap-4 overflow-x-auto pb-2 snap-x;
+    scrollbar-width: none;
+  }
+
+  .media-scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  .media-scroll .media-card {
+    @apply flex-none w-36 snap-start;
+  }
+
+  /* =========================================================================
+     MEDIA CARD
+     ========================================================================= */
+
+  .media-card {
+    @apply card bg-base-200 overflow-hidden cursor-pointer;
+
+    &:hover .media-card__poster {
+      transform: scale(1.05);
+    }
+
+    &:hover .media-card__title {
+      @apply text-primary;
+    }
+  }
+
+  .media-card__poster-wrap {
+    @apply relative overflow-hidden bg-base-300;
+    aspect-ratio: 2 / 3;
+  }
+
+  .media-card__poster {
+    @apply w-full h-full object-cover;
+    transition: transform 300ms ease;
+  }
+
+  .media-card__poster--placeholder {
+    @apply w-full h-full flex items-center justify-center text-base-content/20;
+  }
+
+  .media-card__rating {
+    @apply absolute bottom-2 left-2;
+  }
+
+  .media-card__body {
+    @apply p-3;
+  }
+
+  .media-card__title {
+    @apply text-sm font-semibold leading-snug line-clamp-2;
+    transition: color 150ms ease;
+  }
+
+  .media-card__year {
+    @apply text-xs text-base-content/50 mt-1;
+  }
+
+  /* =========================================================================
+     RATING
+     ========================================================================= */
+
+  .rating-badge {
+    @apply badge badge-sm font-bold;
+  }
+
+  .rating-badge--high {
+    @apply badge-success;
+  }
+
+  .rating-badge--mid {
+    @apply badge-warning;
+  }
+
+  .rating-badge--low {
+    @apply badge-outline text-base-content/40;
+  }
+
+  /* =========================================================================
+     GENRE BADGE
+     ========================================================================= */
+
+  .genre-badge {
+    @apply badge badge-outline badge-sm;
+    transition: all 150ms ease;
+
+    &:hover {
+      @apply badge-primary;
+    }
+  }
+
+  /* =========================================================================
+     FILTER BAR
+     ========================================================================= */
+
+  .filter-bar {
+    @apply flex flex-wrap gap-3 mb-8;
+  }
+
+  .filter-bar__select {
+    @apply select select-sm bg-base-200 min-w-36;
+  }
+
+  .filter-bar__reset {
+    @apply btn btn-ghost btn-sm text-base-content/50;
+  }
+
+  /* =========================================================================
+     MEDIA DETAIL
+     ========================================================================= */
+
+  .media-detail {
+    @apply pb-16;
+  }
+
+  .media-detail__backdrop-wrap {
+    @apply relative h-72 lg:h-96 overflow-hidden;
+  }
+
+  .media-detail__backdrop {
+    @apply w-full h-full object-cover;
+  }
+
+  .media-detail__backdrop-overlay {
+    @apply absolute inset-0 bg-gradient-to-t from-base-100 to-transparent;
+  }
+
+  .media-detail__main {
+    @apply max-w-7xl mx-auto px-4 lg:px-8;
+  }
+
+  .media-detail__layout {
+    @apply flex flex-col md:flex-row gap-8 -mt-24 lg:-mt-32 relative z-10;
+  }
+
+  .media-detail__poster-wrap {
+    @apply flex-none w-40 md:w-52 lg:w-64;
+  }
+
+  .media-detail__poster {
+    @apply w-full rounded-lg shadow-2xl object-cover aspect-[2/3];
+  }
+
+  .media-detail__poster--placeholder {
+    @apply w-full rounded-lg aspect-[2/3] bg-base-300 flex items-center justify-center text-base-content/20;
+  }
+
+  .media-detail__info {
+    @apply flex-1 pt-28 md:pt-0;
+  }
+
+  .media-detail__title {
+    @apply text-3xl lg:text-4xl font-black leading-tight;
+  }
+
+  .media-detail__original-title {
+    @apply text-base-content/40 text-base mt-1 mb-4;
+  }
+
+  .media-detail__meta {
+    @apply flex flex-wrap items-center gap-3 text-sm text-base-content/60 mb-4;
+  }
+
+  .media-detail__meta-separator {
+    @apply text-base-content/20;
+  }
+
+  .media-detail__genres {
+    @apply flex flex-wrap gap-2 mb-6;
+  }
+
+  .media-detail__tagline {
+    @apply text-base-content/50 italic mb-4;
+  }
+
+  .media-detail__overview {
+    @apply text-base-content/80 leading-relaxed mb-6 max-w-2xl;
+  }
+
+  .media-detail__section {
+    @apply mt-10;
+  }
+
+  .media-detail__section-title {
+    @apply text-lg font-bold mb-4 pb-2 border-b border-base-300;
+  }
+
+  /* =========================================================================
+     CAST LIST
+     ========================================================================= */
+
+  .cast-scroll {
+    @apply flex gap-3 overflow-x-auto pb-2 snap-x;
+    scrollbar-width: none;
+  }
+
+  .cast-scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* =========================================================================
+     PERSON CARD
+     ========================================================================= */
+
+  .person-card {
+    @apply flex-none w-28 snap-start text-center;
+  }
+
+  .person-card__photo-wrap {
+    @apply w-20 h-20 mx-auto rounded-full overflow-hidden bg-base-300 mb-2;
+  }
+
+  .person-card__photo {
+    @apply w-full h-full object-cover;
+  }
+
+  .person-card__photo--placeholder {
+    @apply w-full h-full flex items-center justify-center text-base-content/20;
+  }
+
+  .person-card__name {
+    @apply text-xs font-semibold line-clamp-2 leading-snug;
+  }
+
+  .person-card__role {
+    @apply text-xs text-base-content/50 line-clamp-1 mt-0.5;
+  }
+
+  /* =========================================================================
+     PROVIDER LIST
+     ========================================================================= */
+
+  .provider-list {
+    @apply space-y-4;
+  }
+
+  .provider-list__group-title {
+    @apply text-xs uppercase tracking-widest text-base-content/40 mb-2;
+  }
+
+  .provider-list__items {
+    @apply flex flex-wrap gap-2;
+  }
+
+  .provider-list__item {
+    @apply tooltip;
+  }
+
+  .provider-list__logo {
+    @apply w-10 h-10 rounded-lg object-cover;
+  }
+
+  /* =========================================================================
+     PAGINATION
+     ========================================================================= */
+
+  .pagination-nav {
+    @apply flex justify-center mt-10;
+  }
+
+  .pagination-nav .pagination {
+    @apply join;
+  }
+
+  /* Surcharge de la pagination Laravel pour utiliser DaisyUI join */
+  .pagination-nav nav > div:first-child {
+    @apply hidden;
+  }
+
+  .pagination-nav nav > div:last-child {
+    @apply flex gap-1;
+  }
+
+  .pagination-nav span[aria-current='page'] > span,
+  .pagination-nav a {
+    @apply btn btn-sm join-item;
+  }
+
+  .pagination-nav span[aria-current='page'] > span {
+    @apply btn-primary pointer-events-none;
+  }
+
+  .pagination-nav span:not([aria-current]) > span {
+    @apply btn btn-sm join-item btn-disabled;
+  }
 }
