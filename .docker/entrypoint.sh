@@ -9,6 +9,12 @@ if [ ! -f .env ]; then
     cp .env.example .env
 fi
 
+# Sourcer le .env pour exposer ses variables dans le shell
+set -o allexport
+# shellcheck source=.env
+source .env
+set +o allexport
+
 # Installer les dépendances Composer si nécessaire
 if [ ! -d vendor ]; then
     echo "[entrypoint] Installation des dépendances Composer..."
