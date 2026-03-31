@@ -11,7 +11,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        // Fait confiance à tous les reverse proxies (Nginx Proxy Manager, Cloudflare…)
+        // pour propager correctement X-Forwarded-Proto: https
+        $middleware->trustProxies(at: '*');
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
