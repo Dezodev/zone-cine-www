@@ -1,0 +1,136 @@
+services:
+
+  # -------------------------------------------------------------------------
+  # Application PHP/Apache
+  # -------------------------------------------------------------------------
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        WWWUSER: ${WWWUSER:-1001}
+        WWWGROUP: ${WWWGROUP:-1001}
+    container_name: zone_cine_app
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-8080}:80"
+    volumes:
+      - .:/var/www/html
+    environment:
+      APP_ENV: local
+      DB_HOST: mysql
+      REDIS_HOST: redis
+      MAIL_HOST: mailpit
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - zone-cine
+
+  # -------------------------------------------------------------------------
+  # Worker queue TMDB
+  # -------------------------------------------------------------------------
+  queue:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: zone_cine_queue
+    restart: unless-stopped
+    command: php artisan queue:work redis --queue=tmdb-import --sleep=3 --tries=3 --max-jobs=500
+    volumes:
+      - .:/var/www/html
+    environment:
+      APP_ENV: local
+      DB_HOST: mysql
+      REDIS_HOST: redis
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - zone-cine
+
+  # -------------------------------------------------------------------------
+  # MySQL 8.4
+  # -------------------------------------------------------------------------
+  mysql:
+    image: mysql:8.4
+    container_name: zone_cine_mysql
+    restart: unless-stopped
+    ports:
+      - "${FORWARD_DB_PORT:-3306}:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: '${DB_PASSWORD:-secret}'
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_DATABASE: '${DB_DATABASE:-zone_cine}'
+      MYSQL_USER: '${DB_USERNAME:-zone_cine}'
+      MYSQL_PASSWORD: '${DB_PASSWORD:-secret}'
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - zone-cine
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-p${DB_PASSWORD:-secret}"]
+      retries: 5
+      interval: 5s
+      timeout: 5s
+
+  # -------------------------------------------------------------------------
+  # Redis
+  # -------------------------------------------------------------------------
+  redis:
+    image: redis:alpine
+    container_name: zone_cine_redis
+    restart: unless-stopped
+    ports:
+      - "${FORWARD_REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - zone-cine
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      retries: 3
+      interval: 5s
+      timeout: 5s
+
+  # -------------------------------------------------------------------------
+  # Node.js — Vite dev server (HMR)
+  # -------------------------------------------------------------------------
+  node:
+    image: node:22-alpine
+    container_name: zone_cine_node
+    working_dir: /var/www/html
+    restart: unless-stopped
+    volumes:
+      - .:/var/www/html
+    ports:
+      - "${VITE_PORT:-5173}:5173"
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    networks:
+      - zone-cine
+
+  # -------------------------------------------------------------------------
+  # Mailpit — Interface mail de dev
+  # -------------------------------------------------------------------------
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: zone_cine_mailpit
+    restart: unless-stopped
+    ports:
+      - "${FORWARD_MAILPIT_PORT:-1025}:1025"
+      - "${FORWARD_MAILPIT_DASHBOARD_PORT:-8025}:8025"
+    networks:
+      - zone-cine
+
+volumes:
+  mysql-data:
+  redis-data:
+
+networks:
+  zone-cine:
+    driver: bridge
