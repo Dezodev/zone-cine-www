@@ -527,7 +527,7 @@
     @apply h-5 w-5;
   }
 
-  .trailer-modal__box {
+  .modal-box.trailer-modal__box {
     @apply w-11/12 max-w-6xl overflow-hidden bg-base-300;
     padding: 0 !important;
   }
