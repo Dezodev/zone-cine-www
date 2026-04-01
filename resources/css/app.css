@@ -14,15 +14,15 @@
 
 [data-theme='zone-cine'] {
   color-scheme: dark;
-  --color-base-100: oklch(5% 0 0);
-  --color-base-200: oklch(10% 0 0);
-  --color-base-300: oklch(15% 0 0);
-  --color-base-content: oklch(95% 0 0);
+  --color-base-100: oklch(12% 0.004 285);
+  --color-base-200: oklch(18% 0.004 285);
+  --color-base-300: oklch(25% 0.004 285);
+  --color-base-content: oklch(92% 0 0);
   --color-primary: oklch(82% 0.17 90);     /* gold */
   --color-primary-content: oklch(15% 0 0);
   --color-secondary: oklch(44% 0.19 25);   /* rouge cinéma */
   --color-secondary-content: oklch(95% 0 0);
-  --color-neutral: oklch(20% 0 0);
+  --color-neutral: oklch(28% 0.004 285);
   --color-neutral-content: oklch(80% 0 0);
   --color-info: oklch(60% 0.15 230);
   --color-success: oklch(60% 0.15 150);
@@ -60,7 +60,10 @@
 
 @layer components {
   .site-header {
-    @apply navbar bg-base-200 border-b border-base-300 sticky top-0 z-50 px-4 lg:px-8;
+    @apply navbar sticky top-0 z-50 px-6 lg:px-10;
+    background: color-mix(in oklch, var(--color-base-200) 85%, transparent);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid color-mix(in oklch, var(--color-base-300) 60%, transparent);
   }
 
   .site-header__logo {
@@ -72,15 +75,41 @@
   }
 
   .site-header__nav {
-    @apply hidden md:flex gap-1;
+    @apply hidden md:flex gap-6;
   }
 
   .site-header__nav-link {
-    @apply btn btn-ghost btn-sm text-base-content/70 hover:text-base-content font-normal;
+    @apply relative text-sm font-medium text-base-content/50 py-1;
+    transition: color 200ms ease;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--color-primary);
+      transform: scaleX(0);
+      transform-origin: center;
+      transition: transform 200ms ease;
+    }
+
+    &:hover {
+      @apply text-base-content;
+    }
+
+    &:hover::after {
+      transform: scaleX(1);
+    }
   }
 
   .site-header__nav-link--active {
-    @apply text-primary;
+    @apply text-base-content;
+
+    &::after {
+      transform: scaleX(1);
+    }
   }
 
   .site-header__actions {
@@ -88,11 +117,13 @@
   }
 
   .site-header__search-btn {
-    @apply btn btn-ghost btn-sm btn-circle;
+    @apply p-2 rounded-full text-base-content/50 hover:text-base-content;
+    transition: color 200ms ease;
   }
 
   .site-header__mobile-btn {
-    @apply btn btn-ghost btn-sm btn-circle md:hidden;
+    @apply p-2 rounded-full text-base-content/50 hover:text-base-content md:hidden;
+    transition: color 200ms ease;
   }
 
   /* =========================================================================
