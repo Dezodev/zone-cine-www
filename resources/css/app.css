@@ -513,4 +513,45 @@
   .pagination-nav span:not([aria-current]) > span {
     @apply btn btn-sm join-item btn-disabled;
   }
+
+  /* =========================================================================
+     TRAILER BUTTON & MODAL
+     ========================================================================= */
+
+  .trailer-btn {
+    @apply btn btn-primary gap-2;
+  }
+
+  .trailer-btn__icon {
+    @apply h-5 w-5;
+  }
+
+  .trailer-modal {
+    @apply modal;
+    &::backdrop {
+      background: oklch(0% 0 0 / 85%);
+    }
+  }
+
+  .trailer-modal__box {
+    @apply modal-box w-11/12 max-w-4xl p-0 overflow-hidden bg-base-300 relative;
+  }
+
+  .trailer-modal__close {
+    @apply btn btn-sm btn-circle btn-ghost absolute top-2 right-2 z-10;
+  }
+
+  .trailer-modal__embed {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 */
+    height: 0;
+  }
+
+  .trailer-modal__iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
 }

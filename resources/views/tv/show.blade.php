@@ -77,6 +77,8 @@
             </div>
           @endif
 
+          <x-trailer-button :trailer="$show->trailer" />
+
           @if ($show->tagline)
             <p class="media-detail__tagline">« {{ $show->tagline }} »</p>
           @endif

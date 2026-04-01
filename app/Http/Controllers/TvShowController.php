@@ -27,7 +27,7 @@ class TvShowController extends Controller
     public function show(string $slug): View
     {
         $show = TvShow::query()
-            ->with(['genres', 'cast', 'crew', 'watchProviders'])
+            ->with(['genres', 'cast', 'crew', 'watchProviders', 'videos'])
             ->where('slug', $slug)
             ->firstOrFail();
 

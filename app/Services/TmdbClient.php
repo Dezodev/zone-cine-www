@@ -21,7 +21,7 @@ class TmdbClient
     public function movie(int $tmdbId): array
     {
         return $this->http
-            ->get("/movie/{$tmdbId}", ['append_to_response' => 'credits,watch/providers'])
+            ->get("/movie/{$tmdbId}", ['append_to_response' => 'credits,watch/providers,videos'])
             ->throw()
             ->json();
     }
@@ -29,7 +29,7 @@ class TmdbClient
     public function tvShow(int $tmdbId): array
     {
         return $this->http
-            ->get("/tv/{$tmdbId}", ['append_to_response' => 'credits,watch/providers'])
+            ->get("/tv/{$tmdbId}", ['append_to_response' => 'credits,watch/providers,videos'])
             ->throw()
             ->json();
     }

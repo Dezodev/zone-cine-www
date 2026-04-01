@@ -27,7 +27,7 @@ class MovieController extends Controller
     public function show(string $slug): View
     {
         $movie = Movie::query()
-            ->with(['genres', 'directors', 'cast', 'watchProviders'])
+            ->with(['genres', 'directors', 'cast', 'watchProviders', 'videos'])
             ->where('slug', $slug)
             ->firstOrFail();
 

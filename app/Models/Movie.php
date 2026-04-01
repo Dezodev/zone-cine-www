@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
  * @property int                                                               $id
@@ -34,6 +35,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Person>        $crew           Équipe technique (pivot department, job)
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Person>        $directors      Réalisateurs uniquement
  * @property-read \Illuminate\Database\Eloquent\Collection<int, WatchProvider> $watchProviders Plateformes de streaming FR (pivot type)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, MediaVideo>   $videos         Bandes-annonces et vidéos YouTube
+ * @property-read MediaVideo|null                                              $trailer        Bande-annonce officielle principale
  */
 class Movie extends Model
 {
@@ -81,5 +84,20 @@ class Movie extends Model
     {
         return $this->belongsToMany(WatchProvider::class, 'movie_watch_provider')
             ->withPivot('type');
+    }
+
+    public function videos(): MorphMany
+    {
+        return $this->morphMany(MediaVideo::class, 'mediable')
+            ->orderByDesc('official')
+            ->orderBy('published_at');
+    }
+
+    public function getTrailerAttribute(): ?MediaVideo
+    {
+        return $this->videos
+            ->where('type', 'Trailer')
+            ->sortByDesc('official')
+            ->first();
     }
 }

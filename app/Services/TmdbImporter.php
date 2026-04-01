@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Genre;
+use App\Models\MediaVideo;
 use App\Models\Movie;
 use App\Models\Person;
 use App\Models\TvShow;
@@ -44,6 +45,7 @@ class TmdbImporter
         $this->syncGenres($movie, $data['genres'] ?? []);
         $this->syncCredits($movie, $data['credits'] ?? []);
         $this->syncMovieWatchProviders($movie, $data['watch/providers']['results']['FR'] ?? []);
+        $this->syncVideos($movie, $data['videos']['results'] ?? []);
 
         return $movie;
     }
@@ -78,6 +80,7 @@ class TmdbImporter
         $this->syncGenres($show, $data['genres'] ?? []);
         $this->syncTvCredits($show, $data['credits'] ?? []);
         $this->syncTvWatchProviders($show, $data['watch/providers']['results']['FR'] ?? []);
+        $this->syncVideos($show, $data['videos']['results'] ?? []);
 
         return $show;
     }
@@ -180,6 +183,30 @@ class TmdbImporter
         }
 
         $show->watchProviders()->sync($pivotData);
+    }
+
+    private function syncVideos(Movie|TvShow $model, array $videos): void
+    {
+        foreach ($videos as $video) {
+            if (($video['site'] ?? '') !== 'YouTube') {
+                continue;
+            }
+
+            MediaVideo::updateOrCreate(
+                [
+                    'mediable_type' => $model::class,
+                    'mediable_id'   => $model->id,
+                    'youtube_key'   => $video['key'],
+                ],
+                [
+                    'name'         => $video['name'],
+                    'type'         => $video['type'],
+                    'site'         => $video['site'],
+                    'official'     => $video['official'] ?? false,
+                    'published_at' => $video['published_at'] ?? null,
+                ]
+            );
+        }
     }
 
     private function upsertPerson(array $data): Person
