@@ -15,7 +15,7 @@
     class="modal"
     onclick="if(event.target===this) this.close();"
   >
-    <div class="modal-box trailer-modal__box">
+    <div class="trailer-modal__box">
       <button
         class="btn btn-sm btn-circle btn-ghost absolute top-2 right-2 z-10"
         aria-label="Fermer"
