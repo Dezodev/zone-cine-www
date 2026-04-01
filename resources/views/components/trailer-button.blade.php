@@ -12,12 +12,12 @@
 
   <dialog
     id="trailer-modal-{{ $trailer->youtube_key }}"
-    class="trailer-modal"
+    class="modal"
     onclick="if(event.target===this) this.close();"
   >
-    <div class="trailer-modal__box">
+    <div class="modal-box trailer-modal__box">
       <button
-        class="trailer-modal__close"
+        class="btn btn-sm btn-circle btn-ghost absolute top-2 right-2 z-10"
         aria-label="Fermer"
         onclick="this.closest('dialog').close();"
       >
