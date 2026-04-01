@@ -64,7 +64,7 @@ class TvShow extends Model
     public function crew(): BelongsToMany
     {
         return $this->belongsToMany(Person::class, 'person_tv_show')
-            ->wherePivotNot('department', 'Acting')
+            ->wherePivot('department', '!=', 'Acting')
             ->withPivot('department', 'job');
     }
 
