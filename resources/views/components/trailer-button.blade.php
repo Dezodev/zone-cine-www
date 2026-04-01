@@ -3,31 +3,32 @@
 @if ($trailer)
   <button
     class="trailer-btn"
-    data-youtube-key="{{ $trailer->youtube_key }}"
     aria-label="Voir la bande-annonce"
-    onclick="document.getElementById('trailer-modal').showModal(); document.getElementById('trailer-iframe').src='https://www.youtube.com/embed/{{ $trailer->youtube_key }}?autoplay=1&rel=0';"
+    onclick="document.getElementById('trailer-modal-{{ $trailer->youtube_key }}').showModal();"
   >
     <x-gmsi-o-play_circle class="trailer-btn__icon" />
     <span>Bande-annonce</span>
   </button>
 
-  <dialog id="trailer-modal" class="trailer-modal" onclick="if(event.target===this){this.close();document.getElementById('trailer-iframe').src='';}">
+  <dialog
+    id="trailer-modal-{{ $trailer->youtube_key }}"
+    class="trailer-modal"
+    onclick="if(event.target===this) this.close();"
+  >
     <div class="trailer-modal__box">
       <button
         class="trailer-modal__close"
         aria-label="Fermer"
-        onclick="this.closest('dialog').close();document.getElementById('trailer-iframe').src='';"
+        onclick="this.closest('dialog').close();"
       >
         <x-gmsi-o-close class="h-5 w-5" />
       </button>
       <div class="trailer-modal__embed">
-        <iframe
-          id="trailer-iframe"
-          class="trailer-modal__iframe"
-          src=""
-          allow="autoplay; encrypted-media"
-          allowfullscreen
-        ></iframe>
+        <lite-youtube
+          videoid="{{ $trailer->youtube_key }}"
+          nocookie
+          params="rel=0"
+        ></lite-youtube>
       </div>
     </div>
   </dialog>
