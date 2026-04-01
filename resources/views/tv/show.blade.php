@@ -34,9 +34,7 @@
             >
           @else
             <div class="media-detail__poster--placeholder">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 16h4m10 0h4M4 20h16a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1z"/>
-              </svg>
+              <x-gmsi-o-tv class="h-16 w-16" />
             </div>
           @endif
         </div>

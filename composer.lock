@@ -4,8 +4,89 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "53b5d56b3b7e3cbac1713e68c8850f6c",
+    "content-hash": "296e28730ec19db46f5bc39902293a63",
     "packages": [
+        {
+            "name": "blade-ui-kit/blade-icons",
+            "version": "1.9.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/driesvints/blade-icons.git",
+                "reference": "caa92fde675d7a651c38bf73ca582ddada56f318"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/driesvints/blade-icons/zipball/caa92fde675d7a651c38bf73ca582ddada56f318",
+                "reference": "caa92fde675d7a651c38bf73ca582ddada56f318",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/contracts": "^8.0|^9.0|^10.0|^11.0|^12.0|^13.0",
+                "illuminate/filesystem": "^8.0|^9.0|^10.0|^11.0|^12.0|^13.0",
+                "illuminate/support": "^8.0|^9.0|^10.0|^11.0|^12.0|^13.0",
+                "illuminate/view": "^8.0|^9.0|^10.0|^11.0|^12.0|^13.0",
+                "php": "^7.4|^8.0",
+                "symfony/console": "^5.3|^6.0|^7.0|^8.0",
+                "symfony/finder": "^5.3|^6.0|^7.0|^8.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.5.1",
+                "orchestra/testbench": "^6.0|^7.0|^8.0|^9.0|^10.0|^11.0",
+                "phpunit/phpunit": "^9.0|^10.5|^11.0"
+            },
+            "bin": [
+                "bin/blade-icons-generate"
+            ],
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "BladeUI\\Icons\\BladeIconsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/helpers.php"
+                ],
+                "psr-4": {
+                    "BladeUI\\Icons\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dries Vints",
+                    "homepage": "https://driesvints.com"
+                }
+            ],
+            "description": "A package to easily make use of icons in your Laravel Blade views.",
+            "homepage": "https://github.com/driesvints/blade-icons",
+            "keywords": [
+                "blade",
+                "icons",
+                "laravel",
+                "svg"
+            ],
+            "support": {
+                "issues": "https://github.com/driesvints/blade-icons/issues",
+                "source": "https://github.com/driesvints/blade-icons"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/sponsors/driesvints",
+                    "type": "github"
+                },
+                {
+                    "url": "https://www.paypal.com/paypalme/driesvints",
+                    "type": "paypal"
+                }
+            ],
+            "time": "2026-02-23T10:42:23+00:00"
+        },
         {
             "name": "brick/math",
             "version": "0.14.8",
@@ -1052,6 +1133,67 @@
                 }
             ],
             "time": "2025-08-22T14:27:06+00:00"
+        },
+        {
+            "name": "kienso/blade-google-material-symbols",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/emendo-web/blade-google-material-symbols-icons.git",
+                "reference": "65b25cc009be49819ea19e42b6ca82299a698843"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/emendo-web/blade-google-material-symbols-icons/zipball/65b25cc009be49819ea19e42b6ca82299a698843",
+                "reference": "65b25cc009be49819ea19e42b6ca82299a698843",
+                "shasum": ""
+            },
+            "require": {
+                "blade-ui-kit/blade-icons": "^1.6",
+                "illuminate/support": "^11.0|^12.0",
+                "php": "^8.4 || ^8.3"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^10.0",
+                "phpunit/phpunit": "^11.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Kienso\\BladeMaterialSymbols\\BladeMaterialSymbolsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Kienso\\BladeMaterialSymbols\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kienso",
+                    "homepage": "https://www.kienso.fr/"
+                }
+            ],
+            "description": "A package to easily make use of Google Material Symbols Icons in your Laravel Blade views.",
+            "homepage": "https://github.com/blade-organization/blade-heroicons",
+            "keywords": [
+                "blade",
+                "google",
+                "icons",
+                "laravel",
+                "material-symbols"
+            ],
+            "support": {
+                "issues": "https://github.com/emendo-web/blade-google-material-symbols-icons/issues",
+                "source": "https://github.com/emendo-web/blade-google-material-symbols-icons/tree/1.0.0"
+            },
+            "time": "2025-03-17T15:34:22+00:00"
         },
         {
             "name": "laravel/framework",
