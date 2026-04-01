@@ -7,7 +7,7 @@
     aria-label="Voir la bande-annonce"
     onclick="document.getElementById('trailer-modal').showModal(); document.getElementById('trailer-iframe').src='https://www.youtube.com/embed/{{ $trailer->youtube_key }}?autoplay=1&rel=0';"
   >
-    <x-gmsi-o-play-circle class="trailer-btn__icon" />
+    <x-gmsi-o-play_circle class="trailer-btn__icon" />
     <span>Bande-annonce</span>
   </button>
 
