@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
@@ -26,6 +28,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property float                                                             $vote_average        Note moyenne TMDB (0-10)
  * @property int                                                               $vote_count          Nombre de votes TMDB
  * @property float                                                             $popularity          Score de popularité TMDB
+ * @property bool                                                              $hidden              Caché de toutes les listes
  * @property \Illuminate\Support\Carbon                                        $created_at
  * @property \Illuminate\Support\Carbon                                        $updated_at
  *
@@ -43,13 +46,24 @@ class TvShow extends Model
         'overview', 'tagline', 'poster_path', 'backdrop_path',
         'first_air_date', 'last_air_date', 'original_language',
         'status', 'type', 'number_of_seasons', 'number_of_episodes',
-        'vote_average', 'vote_count', 'popularity',
+        'vote_average', 'vote_count', 'popularity', 'hidden',
     ];
 
     protected $casts = [
         'first_air_date' => 'date',
         'last_air_date'  => 'date',
+        'hidden'         => 'boolean',
     ];
+
+    protected static function booted(): void
+    {
+        static::addGlobalScope('visible', fn (Builder $q) => $q->where('hidden', false));
+    }
+
+    public function seasons(): HasMany
+    {
+        return $this->hasMany(Season::class)->orderBy('season_number');
+    }
 
     public function genres(): BelongsToMany
     {

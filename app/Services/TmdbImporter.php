@@ -2,10 +2,12 @@
 
 namespace App\Services;
 
+use App\Models\Episode;
 use App\Models\Genre;
 use App\Models\MediaVideo;
 use App\Models\Movie;
 use App\Models\Person;
+use App\Models\Season;
 use App\Models\TvShow;
 use App\Models\WatchProvider;
 use Illuminate\Support\Str;
@@ -81,8 +83,52 @@ class TmdbImporter
         $this->syncTvCredits($show, $data['credits'] ?? []);
         $this->syncTvWatchProviders($show, $data['watch/providers']['results']['FR'] ?? []);
         $this->syncVideos($show, $data['videos']['results'] ?? []);
+        $this->syncSeasons($show, $data['seasons'] ?? []);
 
         return $show;
+    }
+
+    private function syncSeasons(TvShow $show, array $seasons): void
+    {
+        foreach ($seasons as $s) {
+            $season = Season::updateOrCreate(
+                ['tv_show_id' => $show->id, 'season_number' => $s['season_number']],
+                [
+                    'tmdb_id'       => $s['id'],
+                    'name'          => $s['name'],
+                    'overview'      => $s['overview'] ?? null,
+                    'poster_path'   => $s['poster_path'] ?? null,
+                    'air_date'      => $s['air_date'] ?: null,
+                    'episode_count' => $s['episode_count'] ?? 0,
+                ]
+            );
+
+            $this->syncEpisodes($show, $season);
+        }
+    }
+
+    private function syncEpisodes(TvShow $show, Season $season): void
+    {
+        try {
+            $data = $this->client->tvSeason($show->tmdb_id, $season->season_number);
+        } catch (\Throwable) {
+            return;
+        }
+
+        foreach ($data['episodes'] ?? [] as $e) {
+            Episode::updateOrCreate(
+                ['season_id' => $season->id, 'episode_number' => $e['episode_number']],
+                [
+                    'tmdb_id'        => $e['id'],
+                    'name'           => $e['name'],
+                    'overview'       => $e['overview'] ?? null,
+                    'still_path'     => $e['still_path'] ?? null,
+                    'air_date'       => $e['air_date'] ?: null,
+                    'runtime'        => $e['runtime'] ?? null,
+                    'vote_average'   => $e['vote_average'] ?? 0,
+                ]
+            );
+        }
     }
 
     private function syncGenres(Movie|TvShow $model, array $genres): void

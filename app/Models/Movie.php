@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -27,6 +28,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property int                                                               $budget            Budget en dollars
  * @property int                                                               $revenue           Recettes mondiales en dollars
  * @property bool                                                              $adult             Film pour adultes
+ * @property bool                                                              $hidden            Caché de toutes les listes
  * @property \Illuminate\Support\Carbon                                        $created_at
  * @property \Illuminate\Support\Carbon                                        $updated_at
  *
@@ -45,13 +47,19 @@ class Movie extends Model
         'overview', 'tagline', 'poster_path', 'backdrop_path',
         'release_date', 'runtime', 'original_language', 'status',
         'vote_average', 'vote_count', 'popularity',
-        'budget', 'revenue', 'adult',
+        'budget', 'revenue', 'adult', 'hidden',
     ];
 
     protected $casts = [
         'release_date' => 'date',
         'adult'        => 'boolean',
+        'hidden'       => 'boolean',
     ];
+
+    protected static function booted(): void
+    {
+        static::addGlobalScope('visible', fn (Builder $q) => $q->where('hidden', false));
+    }
 
     public function genres(): BelongsToMany
     {

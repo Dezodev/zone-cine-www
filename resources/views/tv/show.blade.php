@@ -115,6 +115,81 @@
         </div>
       @endif
 
+      {{-- Saisons & épisodes --}}
+      @if ($show->seasons->isNotEmpty())
+        <div class="media-detail__section">
+          <h2 class="media-detail__section-title">Saisons & épisodes</h2>
+          <div class="seasons-list">
+            @foreach ($show->seasons as $season)
+              <details class="season-item" {{ $loop->first ? 'open' : '' }}>
+                <summary class="season-item__header">
+                  <div class="season-item__header-left">
+                    @if ($season->poster_path)
+                      <img
+                        class="season-item__poster"
+                        src="https://image.tmdb.org/t/p/w92{{ $season->poster_path }}"
+                        alt="{{ $season->name }}"
+                        loading="lazy"
+                      >
+                    @else
+                      <div class="season-item__poster season-item__poster--placeholder">
+                        <x-gmsi-o-tv class="h-5 w-5" />
+                      </div>
+                    @endif
+                    <div>
+                      <span class="season-item__name">{{ $season->name }}</span>
+                      <span class="season-item__count">{{ $season->episode_count }} épisode{{ $season->episode_count > 1 ? 's' : '' }}</span>
+                    </div>
+                  </div>
+                  <svg class="season-item__chevron h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="6 9 12 15 18 9"/>
+                  </svg>
+                </summary>
+
+                <div class="season-item__episodes">
+                  @forelse ($season->episodes as $episode)
+                    <div class="episode-item">
+                      @if ($episode->still_path)
+                        <img
+                          class="episode-item__still"
+                          src="https://image.tmdb.org/t/p/w300{{ $episode->still_path }}"
+                          alt="{{ $episode->name }}"
+                          loading="lazy"
+                        >
+                      @else
+                        <div class="episode-item__still episode-item__still--placeholder">
+                          <x-gmsi-o-movie class="h-6 w-6" />
+                        </div>
+                      @endif
+                      <div class="episode-item__body">
+                        <div class="episode-item__header">
+                          <span class="episode-item__number">E{{ $episode->episode_number }}</span>
+                          <span class="episode-item__title">{{ $episode->name }}</span>
+                          @if ($episode->runtime)
+                            <span class="episode-item__runtime">{{ $episode->runtime }} min</span>
+                          @endif
+                          @if ($episode->vote_average > 0)
+                            <span class="episode-item__rating">★ {{ number_format($episode->vote_average, 1) }}</span>
+                          @endif
+                        </div>
+                        @if ($episode->overview)
+                          <p class="episode-item__overview">{{ $episode->overview }}</p>
+                        @endif
+                        @if ($episode->air_date)
+                          <span class="episode-item__date">{{ $episode->air_date->translatedFormat('d M Y') }}</span>
+                        @endif
+                      </div>
+                    </div>
+                  @empty
+                    <p class="px-4 py-3 text-sm text-base-content/40">Aucun épisode disponible.</p>
+                  @endforelse
+                </div>
+              </details>
+            @endforeach
+          </div>
+        </div>
+      @endif
+
       {{-- Plateformes streaming --}}
       <div class="media-detail__section">
         <h2 class="media-detail__section-title">Où regarder en France</h2>

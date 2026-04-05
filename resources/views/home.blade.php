@@ -4,7 +4,7 @@
 
 @section('content')
 
-  {{-- Hero : premier film à l'affiche --}}
+  {{-- Hero : film populaire --}}
   @if ($nowPlaying->isNotEmpty())
     @php $featured = $nowPlaying->first(); @endphp
     <section class="page-hero">
@@ -17,7 +17,7 @@
       @endif
       <div class="page-hero__overlay"></div>
       <div class="page-hero__content">
-        <span class="page-hero__label">À l'affiche</span>
+        <span class="page-hero__label">Populaire</span>
         <h1 class="page-hero__title">{{ $featured->title }}</h1>
         <div class="page-hero__meta">
           @if ($featured->release_date)
@@ -44,32 +44,16 @@
     </section>
   @endif
 
-  {{-- À l'affiche --}}
+  {{-- Films populaires --}}
   @if ($nowPlaying->count() > 1)
     <section class="section">
       <div class="section__inner">
         <div class="section__header">
-          <h2 class="section__title">À l'affiche</h2>
+          <h2 class="section__title">Films populaires</h2>
           <a href="{{ route('movies.index') }}" class="section__link">Voir tout →</a>
         </div>
         <div class="media-scroll">
           @foreach ($nowPlaying->skip(1) as $movie)
-            <x-media-card :media="$movie" />
-          @endforeach
-        </div>
-      </div>
-    </section>
-  @endif
-
-  {{-- Prochainement --}}
-  @if ($upcoming->isNotEmpty())
-    <section class="section">
-      <div class="section__inner">
-        <div class="section__header">
-          <h2 class="section__title">Prochainement</h2>
-        </div>
-        <div class="media-scroll">
-          @foreach ($upcoming as $movie)
             <x-media-card :media="$movie" />
           @endforeach
         </div>

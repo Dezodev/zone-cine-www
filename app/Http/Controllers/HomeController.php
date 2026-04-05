@@ -17,17 +17,11 @@ class HomeController extends Controller
             ->limit(10)
             ->get();
 
-        $upcoming = Movie::query()
-            ->where('release_date', '>', now())
-            ->orderBy('release_date')
-            ->limit(6)
-            ->get();
-
         $popularShows = TvShow::query()
             ->orderByDesc('popularity')
             ->limit(10)
             ->get();
 
-        return view('home', compact('nowPlaying', 'upcoming', 'popularShows'));
+        return view('home', compact('nowPlaying', 'popularShows'));
     }
 }

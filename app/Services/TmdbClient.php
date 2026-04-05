@@ -34,6 +34,14 @@ class TmdbClient
             ->json();
     }
 
+    public function tvSeason(int $tmdbId, int $seasonNumber): array
+    {
+        return $this->http
+            ->get("/tv/{$tmdbId}/season/{$seasonNumber}")
+            ->throw()
+            ->json();
+    }
+
     public function person(int $tmdbId): array
     {
         return $this->http
