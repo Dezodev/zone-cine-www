@@ -22,9 +22,10 @@
     </div>
 
     <div class="media-detail__main">
+
+      {{-- En-tête : affiche + titre --}}
       <div class="media-detail__layout">
 
-        {{-- Affiche --}}
         <div class="media-detail__poster-wrap">
           @if ($show->poster_path)
             <img
@@ -39,7 +40,6 @@
           @endif
         </div>
 
-        {{-- Informations --}}
         <div class="media-detail__info">
           <h1 class="media-detail__title">{{ $show->name }}</h1>
           @if ($show->original_name !== $show->name)
@@ -64,6 +64,7 @@
               <span class="rating-badge {{ $show->vote_average >= 7 ? 'rating-badge--high' : ($show->vote_average >= 5 ? 'rating-badge--mid' : 'rating-badge--low') }}">
                 ★ {{ number_format($show->vote_average, 1) }}
               </span>
+              <span class="text-base-content/30 text-xs">{{ number_format($show->vote_count) }} votes</span>
             @endif
           </div>
 
@@ -76,34 +77,85 @@
               @endforeach
             </div>
           @endif
+        </div>
+      </div>
 
-          <x-trailer-button :trailer="$show->trailer" />
+      {{-- Corps 2 colonnes --}}
+      <div class="media-detail__body">
 
+        {{-- Colonne principale : synopsis + bande-annonce --}}
+        <div class="media-detail__primary">
           @if ($show->tagline)
             <p class="media-detail__tagline">« {{ $show->tagline }} »</p>
           @endif
-
           @if ($show->overview)
             <p class="media-detail__overview">{{ $show->overview }}</p>
           @endif
 
-          {{-- Statut --}}
-          @if ($show->status)
-            @php
-              $statusLabel = match($show->status) {
-                'Returning Series' => 'En cours',
-                'Ended'            => 'Terminée',
-                'Canceled'         => 'Annulée',
-                'In Production'    => 'En production',
-                default            => $show->status,
-              };
-            @endphp
-            <span class="badge badge-outline">{{ $statusLabel }}</span>
+          @if ($show->trailer)
+            <div class="media-detail__trailer">
+              <lite-youtube
+                videoid="{{ $show->trailer->youtube_key }}"
+                nocookie
+                params="rel=0"
+              ></lite-youtube>
+            </div>
           @endif
         </div>
+
+        {{-- Colonne secondaire : plateformes + infos --}}
+        <aside class="media-detail__secondary">
+
+          <div class="media-detail__secondary-block">
+            <h2 class="media-detail__section-title">Où regarder en France</h2>
+            <x-streaming-providers :providers="$show->watchProviders" />
+          </div>
+
+          <div class="media-detail__secondary-block">
+            <h2 class="media-detail__section-title">Fiche technique</h2>
+            <dl class="media-detail__facts">
+              @if ($show->status)
+                @php $status = \App\Enums\TvShowStatus::tryFrom($show->status); @endphp
+                <div class="media-detail__fact">
+                  <dt>Statut</dt>
+                  <dd>
+                    <span class="badge badge-sm {{ $status?->badgeClass() ?? 'badge-outline' }}">
+                      {{ $status?->label() ?? $show->status }}
+                    </span>
+                  </dd>
+                </div>
+              @endif
+              @if ($show->type)
+                <div class="media-detail__fact">
+                  <dt>Type</dt>
+                  <dd>{{ \App\Enums\TvShowType::tryFrom($show->type)?->label() ?? $show->type }}</dd>
+                </div>
+              @endif
+              @if ($show->original_language)
+                <div class="media-detail__fact">
+                  <dt>Langue originale</dt>
+                  <dd>{{ \Locale::getDisplayLanguage($show->original_language, 'fr') }}</dd>
+                </div>
+              @endif
+              @if ($show->number_of_seasons > 0)
+                <div class="media-detail__facts-row">
+                  <div class="media-detail__fact">
+                    <dt>Saisons</dt>
+                    <dd>{{ $show->number_of_seasons }}</dd>
+                  </div>
+                  <div class="media-detail__fact">
+                    <dt>Épisodes</dt>
+                    <dd>{{ $show->number_of_episodes }}</dd>
+                  </div>
+                </div>
+              @endif
+            </dl>
+          </div>
+
+        </aside>
       </div>
 
-      {{-- Casting --}}
+      {{-- Casting (pleine largeur) --}}
       @if ($show->cast->isNotEmpty())
         <div class="media-detail__section">
           <h2 class="media-detail__section-title">Casting</h2>
@@ -115,7 +167,7 @@
         </div>
       @endif
 
-      {{-- Saisons & épisodes --}}
+      {{-- Saisons & épisodes (pleine largeur) --}}
       @if ($show->seasons->isNotEmpty())
         <div class="media-detail__section">
           <h2 class="media-detail__section-title">Saisons & épisodes</h2>
@@ -189,12 +241,6 @@
           </div>
         </div>
       @endif
-
-      {{-- Plateformes streaming --}}
-      <div class="media-detail__section">
-        <h2 class="media-detail__section-title">Où regarder en France</h2>
-        <x-streaming-providers :providers="$show->watchProviders" />
-      </div>
 
     </div>
   </article>
