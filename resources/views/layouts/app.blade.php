@@ -38,9 +38,9 @@
     </nav>
 
     <div class="navbar-end site-header__actions">
-      <button class="site-header__search-btn" aria-label="Rechercher">
+      <a href="{{ route('search') }}" class="site-header__search-btn {{ request()->routeIs('search') ? 'site-header__search-btn--active' : '' }}" aria-label="Rechercher">
         <x-gmsi-o-search class="h-5 w-5" />
-      </button>
+      </a>
     </div>
   </header>
 

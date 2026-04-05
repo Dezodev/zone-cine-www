@@ -5,9 +5,13 @@ use App\Http\Controllers\MovieController;
 use App\Http\Controllers\TvShowController;
 use App\Http\Controllers\PersonController;
 use App\Http\Controllers\GenreController;
+use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
+// Recherche
+Route::get('/recherche', [SearchController::class, 'index'])->name('search');
 
 // Films
 Route::prefix('films')->name('movies.')->group(function () {

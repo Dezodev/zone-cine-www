@@ -130,6 +130,10 @@
         transition: color 200ms ease;
     }
 
+    .site-header__search-btn--active {
+        @apply text-primary;
+    }
+
     .site-header__mobile-btn {
         @apply p-2 rounded-full text-base-content/50 hover:text-base-content md:hidden;
         transition: color 200ms ease;
@@ -346,6 +350,49 @@
 
     .filter-bar__reset {
         @apply btn btn-ghost btn-sm text-base-content/50;
+    }
+
+    /* =========================================================================
+     SEARCH
+     ========================================================================= */
+
+    .search-form {
+        @apply mb-10;
+    }
+
+    .search-form__field {
+        @apply relative flex items-center;
+    }
+
+    .search-form__icon {
+        @apply absolute left-4 z-10 text-base-content/40 pointer-events-none;
+    }
+
+    .search-form__input {
+        @apply input w-full pl-12 pr-10 py-3 text-base bg-base-200 border border-base-300 rounded-xl;
+        @apply focus:outline-none focus:border-primary;
+        transition: border-color 150ms ease;
+    }
+
+    .search-form__clear {
+        @apply absolute right-4 text-base-content/40 hover:text-base-content;
+        transition: color 150ms ease;
+    }
+
+    .search-empty {
+        @apply text-base-content/40 text-center py-20 text-lg;
+    }
+
+    .search-section {
+        @apply mb-12;
+    }
+
+    .search-section__title {
+        @apply text-lg font-bold mb-5 flex items-center gap-3;
+    }
+
+    .search-section__count {
+        @apply badge badge-neutral text-xs font-normal;
     }
 
     /* =========================================================================
