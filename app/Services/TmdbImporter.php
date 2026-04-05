@@ -269,13 +269,6 @@ class TmdbImporter
 
     private function uniqueSlug(string $model, string $title, int $tmdbId): string
     {
-        $base = Str::slug($title);
-        $slug = $base;
-
-        if ($model::where('slug', $slug)->exists()) {
-            $slug = $base . '-' . $tmdbId;
-        }
-
-        return $slug;
+        return Str::slug($title) . '-' . $tmdbId;
     }
 }
