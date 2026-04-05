@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Genre;
 use App\Models\Movie;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -18,10 +19,12 @@ class MovieController extends Controller
             ->when($request->tri === 'date', fn ($q) => $q->orderByDesc('release_date'))
             ->when($request->tri === 'note', fn ($q) => $q->orderByDesc('vote_average'))
             ->when(! $request->tri, fn ($q) => $q->orderByDesc('popularity'))
-            ->paginate(24)
+            ->paginate(25)
             ->withQueryString();
 
-        return view('movies.index', compact('movies'));
+        $genres = Genre::whereHas('movies')->orderBy('name')->get();
+
+        return view('movies.index', compact('movies', 'genres'));
     }
 
     public function show(string $slug): View

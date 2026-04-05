@@ -341,7 +341,7 @@
     }
 
     .filter-bar__select {
-        @apply select select-sm bg-base-200 min-w-36;
+        @apply select select-sm bg-base-200 min-w-28 max-w-36;
     }
 
     .filter-bar__reset {
@@ -575,33 +575,23 @@
      ========================================================================= */
 
     .pagination-nav {
-        @apply flex justify-center mt-10;
+        @apply flex justify-center mt-12;
     }
 
-    .pagination-nav .pagination {
-        @apply join;
+    .pagination-bar {
+        @apply flex items-center gap-6;
     }
 
-    /* Surcharge de la pagination Laravel pour utiliser DaisyUI join */
-    .pagination-nav nav > div:first-child {
-        @apply hidden;
+    .pagination-bar__info {
+        @apply text-sm text-base-content/50 tabular-nums min-w-32 text-center;
     }
 
-    .pagination-nav nav > div:last-child {
-        @apply flex gap-1;
+    .pagination-bar__arrow {
+        @apply btn btn-circle btn-sm btn-ghost text-base-content/60 hover:text-base-content hover:bg-base-200;
     }
 
-    .pagination-nav span[aria-current="page"] > span,
-    .pagination-nav a {
-        @apply btn btn-sm join-item;
-    }
-
-    .pagination-nav span[aria-current="page"] > span {
-        @apply btn-primary pointer-events-none;
-    }
-
-    .pagination-nav span:not([aria-current]) > span {
-        @apply btn btn-sm join-item btn-disabled;
+    .pagination-bar__arrow--disabled {
+        @apply btn btn-circle btn-sm btn-ghost text-base-content/20 pointer-events-none;
     }
 
     /* =========================================================================
