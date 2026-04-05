@@ -420,6 +420,53 @@
         @apply text-base-content/80 leading-relaxed mb-6 max-w-2xl;
     }
 
+    .media-detail__body {
+        @apply grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-10 mt-10;
+    }
+
+    .media-detail__primary {
+        @apply min-w-0;
+    }
+
+    .media-detail__trailer {
+        @apply mt-6 rounded-xl overflow-hidden;
+        aspect-ratio: 16 / 9;
+
+        & lite-youtube {
+            width: 100%;
+            height: 100%;
+            max-width: unset !important;
+        }
+    }
+
+    .media-detail__secondary {
+        @apply flex flex-col gap-8;
+    }
+
+    .media-detail__secondary-block {
+        @apply flex flex-col;
+    }
+
+    .media-detail__facts {
+        @apply space-y-2;
+    }
+
+    .media-detail__facts-row {
+        @apply grid grid-cols-2 gap-4;
+    }
+
+    .media-detail__fact {
+        @apply flex flex-col text-sm;
+
+        & dt {
+            @apply text-xs uppercase tracking-widest text-base-content/40 mb-0.5;
+        }
+
+        & dd {
+            @apply text-base-content/80 font-medium;
+        }
+    }
+
     .media-detail__section {
         @apply mt-10;
     }
@@ -440,6 +487,36 @@
     .cast-scroll::-webkit-scrollbar {
         display: none;
     }
+
+    .cast-scroll-wrap {
+        @apply relative;
+    }
+
+    .cast-scroll-wrap::before,
+    .cast-scroll-wrap::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 80px;
+        z-index: 1;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 300ms ease;
+    }
+
+    .cast-scroll-wrap::before {
+        left: 0;
+        background: linear-gradient(to right, var(--color-base-100), transparent);
+    }
+
+    .cast-scroll-wrap::after {
+        right: 0;
+        background: linear-gradient(to left, var(--color-base-100), transparent);
+    }
+
+    .cast-scroll-wrap--fade-left::before  { opacity: 1; }
+    .cast-scroll-wrap--fade-right::after  { opacity: 1; }
 
     /* =========================================================================
      PERSON CARD
