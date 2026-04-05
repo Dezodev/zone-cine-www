@@ -15,7 +15,9 @@
       <form class="filter-bar" method="GET" action="{{ route('tv.index') }}">
         <select name="genre" class="filter-bar__select" onchange="this.form.submit()">
           <option value="">Genre</option>
-          {{-- TODO: injecter les genres --}}
+          @foreach ($genres as $genre)
+            <option value="{{ $genre->slug }}" @selected(request('genre') === $genre->slug)>{{ $genre->name }}</option>
+          @endforeach
         </select>
 
         <select name="statut" class="filter-bar__select" onchange="this.form.submit()">

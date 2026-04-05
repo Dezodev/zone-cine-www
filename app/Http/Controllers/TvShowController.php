@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Genre;
 use App\Models\TvShow;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -18,10 +19,12 @@ class TvShowController extends Controller
             ->when($request->tri === 'date', fn ($q) => $q->orderByDesc('first_air_date'))
             ->when($request->tri === 'note', fn ($q) => $q->orderByDesc('vote_average'))
             ->when(! $request->tri, fn ($q) => $q->orderByDesc('popularity'))
-            ->paginate(24)
+            ->paginate(25)
             ->withQueryString();
 
-        return view('tv.index', compact('shows'));
+        $genres = Genre::whereHas('tvShows')->orderBy('name')->get();
+
+        return view('tv.index', compact('shows', 'genres'));
     }
 
     public function show(string $slug): View
