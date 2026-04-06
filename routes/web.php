@@ -9,6 +9,24 @@ use App\Http\Controllers\LegalController;
 use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 
+// Robots.txt
+Route::get('/robots.txt', function () {
+    $content = app()->isProduction()
+        ? implode("\n", [
+            'User-agent: *',
+            'Allow: /',
+            'Disallow: /recherche',
+            '',
+            'Sitemap: ' . url('sitemap.xml'),
+        ])
+        : implode("\n", [
+            'User-agent: *',
+            'Disallow: /',
+        ]);
+
+    return response($content, 200)->header('Content-Type', 'text/plain');
+});
+
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // Recherche
