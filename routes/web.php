@@ -5,6 +5,7 @@ use App\Http\Controllers\MovieController;
 use App\Http\Controllers\TvShowController;
 use App\Http\Controllers\PersonController;
 use App\Http\Controllers\GenreController;
+use App\Http\Controllers\LegalController;
 use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +30,10 @@ Route::prefix('series')->name('tv.')->group(function () {
 Route::prefix('personnes')->name('people.')->group(function () {
     Route::get('/{slug}', [PersonController::class, 'show'])->name('show');
 });
+
+// Pages légales
+Route::get('/mentions-legales', [LegalController::class, 'mentions'])->name('legal.mentions');
+Route::get('/politique-de-confidentialite', [LegalController::class, 'privacy'])->name('legal.privacy');
 
 // Genres
 Route::prefix('genre')->name('genres.')->group(function () {

@@ -58,6 +58,11 @@
         <a href="https://www.themoviedb.org" target="_blank" rel="noopener" class="text-primary hover:underline">TMDB</a>.
         &copy; {{ date('Y') }} zone-cine.fr
       </p>
+      <nav class="site-footer__legal">
+        <a href="{{ route('legal.mentions') }}" class="site-footer__legal-link">Mentions légales</a>
+        <span class="site-footer__legal-sep" aria-hidden="true">·</span>
+        <a href="{{ route('legal.privacy') }}" class="site-footer__legal-link">Politique de confidentialité</a>
+      </nav>
     </div>
   </footer>
 

@@ -224,7 +224,7 @@
     }
 
     .section__title {
-        @apply text-xl font-bold;
+        @apply text-3xl lg:text-4xl font-black leading-tight;
     }
 
     .section__link {
@@ -760,6 +760,54 @@
         @apply relative w-11/12 max-w-6xl overflow-hidden bg-base-300 rounded-box;
         padding: 0;
         max-height: 90vh;
+    }
+
+    /* =========================================================================
+     FOOTER LEGAL LINKS
+     ========================================================================= */
+
+    .site-footer__legal {
+        @apply flex items-center gap-2 mt-2 text-xs text-base-content/50;
+    }
+
+    .site-footer__legal-link {
+        @apply hover:text-primary transition-colors;
+    }
+
+    .site-footer__legal-sep {
+        @apply select-none;
+    }
+
+    /* =========================================================================
+     LEGAL PAGES
+     ========================================================================= */
+
+    .legal-page__container {
+        @apply max-w-3xl;
+    }
+
+    .legal-page__section {
+        @apply mb-8;
+
+        & h2 {
+            @apply text-lg font-bold mb-4 pb-2 border-b border-base-300;
+        }
+
+        & p {
+            @apply text-base-content/80 leading-relaxed mb-3;
+        }
+
+        & ul {
+            @apply list-disc list-inside space-y-1 text-base-content/80 mb-3 ml-2;
+        }
+    }
+
+    .legal-page__link {
+        @apply text-primary hover:underline;
+    }
+
+    .legal-page__note {
+        @apply text-sm text-base-content/50 italic;
     }
 
     .trailer-modal__embed {
