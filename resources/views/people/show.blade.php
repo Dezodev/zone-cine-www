@@ -5,7 +5,7 @@
   <section class="section">
     <div class="section__inner">
 
-      <div class="media-detail__layout">
+      <div class="media-detail__layout media-detail__layout--no-backdrop">
 
         {{-- Photo --}}
         <div class="media-detail__poster-wrap">

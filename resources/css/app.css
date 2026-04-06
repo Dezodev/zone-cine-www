@@ -423,6 +423,14 @@
         @apply flex flex-col md:flex-row gap-8 -mt-24 lg:-mt-32 relative z-10;
     }
 
+    .media-detail__layout--no-backdrop {
+        @apply mt-0;
+
+        .media-detail__info {
+            @apply pt-0;
+        }
+    }
+
     .media-detail__poster-wrap {
         @apply flex-none w-40 md:w-52 lg:w-64;
     }
