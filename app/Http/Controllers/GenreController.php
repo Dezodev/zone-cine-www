@@ -11,6 +11,11 @@ class GenreController extends Controller
     {
         $genre = Genre::where('slug', $slug)->firstOrFail();
 
+        $this->setSeo(
+            "Films {$genre->name}",
+            "Tous les films du genre {$genre->name} — classés par popularité sur Zone Ciné.",
+        );
+
         $movies = $genre->movies()
             ->orderByDesc('popularity')
             ->paginate(24);
@@ -21,6 +26,11 @@ class GenreController extends Controller
     public function tvShows(string $slug): View
     {
         $genre = Genre::where('slug', $slug)->firstOrFail();
+
+        $this->setSeo(
+            "Séries {$genre->name}",
+            "Toutes les séries du genre {$genre->name} — classées par popularité sur Zone Ciné.",
+        );
 
         $shows = $genre->tvShows()
             ->orderByDesc('popularity')

@@ -1,7 +1,5 @@
 @extends('layouts.app')
 
-@section('title', $query ? "Recherche : {$query}" : 'Recherche')
-@section('description', 'Recherchez des films et séries sur Zone Ciné.')
 
 @section('content')
   <section class="section">

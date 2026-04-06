@@ -1,7 +1,5 @@
 @extends('layouts.app')
 
-@section('title', $person->name)
-@section('description', Str::limit($person->biography, 160))
 
 @section('content')
   <section class="section">

@@ -1,7 +1,5 @@
 @extends('layouts.app')
 
-@section('title', 'Films')
-@section('description', 'Catalogue complet de films — filtrez par genre, année, langue.')
 
 @section('content')
   <section class="section">

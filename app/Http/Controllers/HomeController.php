@@ -10,6 +10,11 @@ class HomeController extends Controller
 {
     public function index(): View
     {
+        $this->setSeo(
+            'Films & Séries en streaming',
+            'Catalogue complet de films et séries en français — streaming, bandes-annonces et fiches détaillées.',
+        );
+
         $nowPlaying = Movie::query()
             ->whereNotNull('release_date')
             ->where('release_date', '<=', now())

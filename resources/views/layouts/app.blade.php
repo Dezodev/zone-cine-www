@@ -4,15 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>@yield('title', 'Zone Ciné') — Zone Ciné</title>
-  <meta name="description" content="@yield('description', 'Films, séries et cinémas en France — catalogue complet et séances en temps réel.')">
-
-  {{-- Open Graph --}}
-  <meta property="og:title" content="@yield('title', 'Zone Ciné')">
-  <meta property="og:description" content="@yield('description', 'Films, séries et cinémas en France.')">
-  <meta property="og:image" content="@yield('og_image', asset('images/og-default.jpg'))">
-  <meta property="og:type" content="website">
-  <meta name="twitter:card" content="summary_large_image">
+  {!! SEOMeta::generate() !!}
+  {!! OpenGraph::generate() !!}
+  {!! Twitter::generate() !!}
+  {!! JsonLd::generate() !!}
 
   @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>

@@ -1,7 +1,5 @@
 @extends('layouts.app')
 
-@section('title', 'Séries ' . $genre->name)
-@section('description', 'Toutes les séries du genre ' . $genre->name . '.')
 
 @section('content')
   <section class="section">

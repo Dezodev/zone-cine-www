@@ -17,6 +17,8 @@ class PersonController extends Controller
             ->where('slug', $slug)
             ->firstOrFail();
 
+        $this->setPersonSeo($person);
+
         return view('people.show', compact('person'));
     }
 }

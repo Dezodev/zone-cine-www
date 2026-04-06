@@ -11,6 +11,11 @@ class MovieController extends Controller
 {
     public function index(Request $request): View
     {
+        $this->setSeo(
+            'Films',
+            'Catalogue complet de films — filtrez par genre, année et langue.',
+        );
+
         $movies = Movie::query()
             ->with('genres')
             ->when($request->genre, fn ($q) => $q->whereHas('genres', fn ($q) => $q->where('slug', $request->genre)))
@@ -33,6 +38,8 @@ class MovieController extends Controller
             ->with(['genres', 'directors', 'cast', 'watchProviders', 'videos'])
             ->where('slug', $slug)
             ->firstOrFail();
+
+        $this->setMovieSeo($movie);
 
         return view('movies.show', compact('movie'));
     }

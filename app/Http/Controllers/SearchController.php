@@ -13,6 +13,11 @@ class SearchController extends Controller
     {
         $query = trim($request->get('q', ''));
 
+        $this->setSeo(
+            $query ? "Recherche : {$query}" : 'Recherche',
+            'Recherchez des films et séries sur Zone Ciné.',
+        );
+
         $movies  = collect();
         $tvShows = collect();
 

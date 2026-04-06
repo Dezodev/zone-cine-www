@@ -1,7 +1,5 @@
 @extends('layouts.app')
 
-@section('title', 'Mentions légales')
-@section('description', 'Mentions légales du site Zone Ciné.')
 
 @section('content')
 <section class="section">

@@ -1,7 +1,5 @@
 @extends('layouts.app')
 
-@section('title', 'Séries')
-@section('description', 'Catalogue complet de séries — filtrez par genre, statut, langue.')
 
 @section('content')
   <section class="section">

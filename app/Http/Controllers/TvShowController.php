@@ -11,6 +11,11 @@ class TvShowController extends Controller
 {
     public function index(Request $request): View
     {
+        $this->setSeo(
+            'Séries',
+            'Catalogue complet de séries TV — filtrez par genre, statut et langue.',
+        );
+
         $shows = TvShow::query()
             ->with('genres')
             ->when($request->genre, fn ($q) => $q->whereHas('genres', fn ($q) => $q->where('slug', $request->genre)))
@@ -33,6 +38,8 @@ class TvShowController extends Controller
             ->with(['genres', 'cast', 'crew', 'watchProviders', 'videos', 'seasons.episodes'])
             ->where('slug', $slug)
             ->firstOrFail();
+
+        $this->setTvShowSeo($show);
 
         return view('tv.show', compact('show'));
     }

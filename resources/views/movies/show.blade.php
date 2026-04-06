@@ -1,10 +1,5 @@
 @extends('layouts.app')
 
-@section('title', $movie->title)
-@section('description', Str::limit($movie->overview, 160))
-@if ($movie->backdrop_path)
-  @section('og_image', 'https://image.tmdb.org/t/p/w1280' . $movie->backdrop_path)
-@endif
 
 @section('content')
   <article class="media-detail">
