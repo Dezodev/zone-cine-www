@@ -20,6 +20,10 @@ class TmdbImporter
     {
         $data = $this->client->movie($tmdbId);
 
+        if (! empty($data['adult'])) {
+            throw new \RuntimeException("Film adulte ignoré (TMDB ID: {$tmdbId})");
+        }
+
         $movie = Movie::updateOrCreate(
             ['tmdb_id' => $data['id']],
             [
@@ -55,6 +59,10 @@ class TmdbImporter
     public function importTvShow(int $tmdbId): TvShow
     {
         $data = $this->client->tvShow($tmdbId);
+
+        if (! empty($data['adult'])) {
+            throw new \RuntimeException("Série adulte ignorée (TMDB ID: {$tmdbId})");
+        }
 
         $show = TvShow::updateOrCreate(
             ['tmdb_id' => $data['id']],

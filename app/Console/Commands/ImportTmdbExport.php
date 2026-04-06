@@ -154,6 +154,11 @@ class ImportTmdbExport extends Command
                 continue;
             }
 
+            if (! empty($entry['adult'])) {
+                $skipped++;
+                continue;
+            }
+
             if (! $dryRun) {
                 $job = $type === 'movies'
                     ? new ImportTmdbMovie((int) $entry['id'])
