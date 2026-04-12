@@ -7,7 +7,7 @@
 
     <div class="section__header">
       <h1 class="section__title">Politique de confidentialité</h1>
-      <span class="text-sm text-base-content/40">Mise à jour le {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}</span>
+      <span class="text-sm text-base-content/40">Mise à jour le 11 avril 2026</span>
     </div>
 
         <section class="legal-page__section">

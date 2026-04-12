@@ -79,8 +79,8 @@
         @apply font-black text-xl tracking-tight text-base-content no-underline;
     }
 
-    .site-header__logo span {
-        @apply text-primary;
+    .site-header__logo-img {
+        @apply h-11 w-auto;
     }
 
     .site-header__nav {
@@ -151,12 +151,16 @@
         @apply max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4;
     }
 
+    .site-footer__branding {
+        @apply flex items-center gap-3;
+    }
+
     .site-footer__logo {
         @apply font-black text-lg text-base-content;
     }
 
-    .site-footer__logo span {
-        @apply text-primary;
+    .site-footer__logo-img {
+        @apply h-8 w-auto;
     }
 
     .site-footer__credits {
@@ -549,7 +553,7 @@
 
     .cast-scroll-wrap::before,
     .cast-scroll-wrap::after {
-        content: '';
+        content: "";
         position: absolute;
         top: 0;
         bottom: 0;
@@ -562,16 +566,28 @@
 
     .cast-scroll-wrap::before {
         left: 0;
-        background: linear-gradient(to right, var(--color-base-100), transparent);
+        background: linear-gradient(
+            to right,
+            var(--color-base-100),
+            transparent
+        );
     }
 
     .cast-scroll-wrap::after {
         right: 0;
-        background: linear-gradient(to left, var(--color-base-100), transparent);
+        background: linear-gradient(
+            to left,
+            var(--color-base-100),
+            transparent
+        );
     }
 
-    .cast-scroll-wrap--fade-left::before  { opacity: 1; }
-    .cast-scroll-wrap--fade-right::after  { opacity: 1; }
+    .cast-scroll-wrap--fade-left::before {
+        opacity: 1;
+    }
+    .cast-scroll-wrap--fade-right::after {
+        opacity: 1;
+    }
 
     /* =========================================================================
      PERSON CARD

@@ -21,9 +21,18 @@ class TvShowResource extends Resource
 
     protected static ?string $navigationLabel = 'Séries';
 
+    protected static string|\UnitEnum|null $navigationGroup = 'Catalogue';
+
+    protected static ?int $navigationSort = 2;
+
     protected static ?string $modelLabel = 'série';
 
     protected static ?string $pluralModelLabel = 'Séries';
+
+    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+    {
+        return parent::getEloquentQuery()->withoutGlobalScope('visible');
+    }
 
     public static function canCreate(): bool
     {

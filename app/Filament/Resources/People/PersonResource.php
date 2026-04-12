@@ -21,6 +21,10 @@ class PersonResource extends Resource
 
     protected static ?string $navigationLabel = 'Personnes';
 
+    protected static string|\UnitEnum|null $navigationGroup = 'Catalogue';
+
+    protected static ?int $navigationSort = 3;
+
     protected static ?string $modelLabel = 'personne';
 
     protected static ?string $pluralModelLabel = 'Personnes';

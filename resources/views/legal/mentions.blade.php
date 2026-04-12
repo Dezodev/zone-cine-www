@@ -7,6 +7,7 @@
 
     <div class="section__header">
       <h1 class="section__title">Mentions légales</h1>
+      <span class="text-sm text-base-content/40">Mise à jour le 11 avril 2026</span>
     </div>
 
         <section class="legal-page__section">

@@ -44,8 +44,10 @@ php artisan migrate
 # Import TMDB catalog from daily exports
 docker compose exec app php artisan tmdb:import-export --type=movies --min-popularity=10
 docker compose exec app php artisan tmdb:import-export --type=tv --min-popularity=10
+# Options: --date=MM_DD_YYYY (default: yesterday), --dry-run (count without dispatching)
 
 # Queue worker for TMDB import jobs
+# --max-jobs=500 restarts the worker every 500 jobs to avoid memory leaks during mass imports
 docker compose exec app php artisan queue:work redis --queue=tmdb-import --sleep=3 --tries=3 --max-jobs=500
 ```
 
@@ -99,3 +101,9 @@ Person cast/crew distinction is on the pivot `department` column: `Acting` = cas
 | `/genre/films/{slug}`, `/genre/series/{slug}` | GenreController |
 
 Routes use slugs (not IDs). The importer generates slugs via `Str::slug()`, appending `-{tmdbId}` on collision.
+
+## Production notes
+
+- The Laravel scheduler must run via cron: `* * * * * cd /path/to/project && php artisan schedule:run >> /dev/null 2>&1`
+- Queue workers for `tmdb-import` should be managed by Supervisor in production.
+- TMDB API rate limit is ~40 req/s on the free plan; parallel workers help but are bounded by this.

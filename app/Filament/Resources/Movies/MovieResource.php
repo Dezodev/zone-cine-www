@@ -21,9 +21,18 @@ class MovieResource extends Resource
 
     protected static ?string $navigationLabel = 'Films';
 
+    protected static string|\UnitEnum|null $navigationGroup = 'Catalogue';
+
+    protected static ?int $navigationSort = 1;
+
     protected static ?string $modelLabel = 'film';
 
     protected static ?string $pluralModelLabel = 'Films';
+
+    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+    {
+        return parent::getEloquentQuery()->withoutGlobalScope('visible');
+    }
 
     public static function canCreate(): bool
     {
