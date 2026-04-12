@@ -1,6 +1,38 @@
 import './bootstrap';
 import 'lite-youtube-embed';
 
+// Menu mobile
+document.addEventListener('DOMContentLoaded', () => {
+    const btn     = document.getElementById('mobile-menu-btn');
+    const menu    = document.getElementById('mobile-menu');
+    const overlay = document.getElementById('mobile-menu-overlay');
+    const closeBtn = document.getElementById('mobile-menu-close');
+
+    if (!btn || !menu || !overlay) return;
+
+    const open = () => {
+        menu.classList.add('is-open');
+        overlay.classList.add('is-open');
+        btn.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+    };
+
+    const close = () => {
+        menu.classList.remove('is-open');
+        overlay.classList.remove('is-open');
+        btn.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+    };
+
+    btn.addEventListener('click', open);
+    overlay.addEventListener('click', close);
+    if (closeBtn) closeBtn.addEventListener('click', close);
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && menu.classList.contains('is-open')) close();
+    });
+});
+
 // Fades gauche/droite sur les scrolls horizontaux avec transition opacity
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.cast-scroll').forEach((el) => {

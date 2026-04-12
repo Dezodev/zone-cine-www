@@ -140,6 +140,67 @@
     }
 
     /* =========================================================================
+     MOBILE MENU
+     ========================================================================= */
+
+    .mobile-menu-overlay {
+        @apply fixed inset-0 z-60 md:hidden;
+        background: rgba(0, 0, 0, 0.6);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 250ms ease;
+
+        &.is-open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+    }
+
+    .mobile-menu {
+        @apply fixed top-0 right-0 h-full z-70 flex flex-col md:hidden;
+        width: min(320px, 85vw);
+        background: var(--color-base-200);
+        border-left: 1px solid color-mix(in oklch, var(--color-base-300) 60%, transparent);
+        transform: translateX(100%);
+        transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
+
+        &.is-open {
+            transform: translateX(0);
+        }
+    }
+
+    .mobile-menu__header {
+        @apply flex items-center justify-between px-5 py-4;
+        border-bottom: 1px solid color-mix(in oklch, var(--color-base-300) 60%, transparent);
+    }
+
+    .mobile-menu__close {
+        @apply p-2 rounded-full text-base-content/50 hover:text-base-content;
+        transition: color 200ms ease;
+    }
+
+    .mobile-menu__nav {
+        @apply flex flex-col px-4 py-6 gap-1;
+    }
+
+    .mobile-menu__link {
+        @apply flex items-center gap-3 px-4 py-3 rounded-xl text-base font-medium text-base-content/60 no-underline;
+        transition: background 200ms ease, color 200ms ease;
+
+        &:hover {
+            @apply bg-base-300 text-base-content;
+        }
+    }
+
+    .mobile-menu__link--active {
+        @apply text-primary bg-primary/10;
+
+        &:hover {
+            @apply bg-primary/15;
+        }
+    }
+
+    /* =========================================================================
      SITE FOOTER
      ========================================================================= */
 
@@ -224,7 +285,7 @@
     }
 
     .section__header {
-        @apply flex items-baseline justify-between mb-6;
+        @apply flex flex-col md:flex-row md:items-baseline md:justify-between mb-6 gap-3;
     }
 
     .section__title {
@@ -448,7 +509,7 @@
     }
 
     .media-detail__info {
-        @apply flex-1 pt-28 md:pt-0;
+        @apply flex-1 pt-4 md:pt-0;
     }
 
     .media-detail__title {

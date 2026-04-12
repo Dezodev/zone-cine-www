@@ -27,7 +27,7 @@
       </a>
     </div>
 
-    <nav class="navbar-center site-header__nav">
+    <nav class="site-header__nav">
       <a href="{{ route('movies.index') }}"
          class="site-header__nav-link {{ request()->routeIs('movies.*') ? 'site-header__nav-link--active' : '' }}">
         Films
@@ -42,8 +42,41 @@
       <a href="{{ route('search') }}" class="site-header__search-btn {{ request()->routeIs('search') ? 'site-header__search-btn--active' : '' }}" aria-label="Rechercher">
         <x-gmsi-o-search class="h-5 w-5" />
       </a>
+      <button id="mobile-menu-btn" class="site-header__mobile-btn" aria-label="Menu" aria-expanded="false" aria-controls="mobile-menu">
+        <x-gmsi-o-menu class="h-6 w-6" />
+      </button>
     </div>
   </header>
+
+  {{-- Menu mobile --}}
+  <div id="mobile-menu-overlay" class="mobile-menu-overlay" aria-hidden="true"></div>
+  <div id="mobile-menu" class="mobile-menu" role="dialog" aria-label="Navigation" aria-modal="true">
+    <div class="mobile-menu__header">
+      <a href="{{ route('home') }}" class="site-header__logo">
+        <img src="{{ asset('images/ZoneCine-logo.svg') }}" alt="Logo ZoneCiné" class="site-header__logo-img"/>
+      </a>
+      <button id="mobile-menu-close" class="mobile-menu__close" aria-label="Fermer le menu">
+        <x-gmsi-o-close class="h-6 w-6" />
+      </button>
+    </div>
+    <nav class="mobile-menu__nav">
+      <a href="{{ route('movies.index') }}"
+         class="mobile-menu__link {{ request()->routeIs('movies.*') ? 'mobile-menu__link--active' : '' }}">
+        <x-gmsi-o-movie class="h-5 w-5" />
+        Films
+      </a>
+      <a href="{{ route('tv.index') }}"
+         class="mobile-menu__link {{ request()->routeIs('tv.*') ? 'mobile-menu__link--active' : '' }}">
+        <x-gmsi-o-tv class="h-5 w-5" />
+        Séries
+      </a>
+      <a href="{{ route('search') }}"
+         class="mobile-menu__link {{ request()->routeIs('search') ? 'mobile-menu__link--active' : '' }}">
+        <x-gmsi-o-search class="h-5 w-5" />
+        Rechercher
+      </a>
+    </nav>
+  </div>
 
   {{-- Contenu principal --}}
   <main>
