@@ -115,7 +115,16 @@ trap - ERR
 step "Désactivation du mode maintenance"
 ARTISAN up
 
-# ── 9. Sitemap ────────────────────────────────────────────────────────────────
+# ── 9. Redémarrage du worker de queue ────────────────────────────────────────
+step "Redémarrage du worker de queue (Supervisor)"
+if command -v supervisorctl >/dev/null 2>&1; then
+    supervisorctl restart zone-cine-queue:* 2>/dev/null || true
+    ok "Workers de queue redémarrés"
+else
+    warn "supervisorctl introuvable — redémarrez manuellement les workers si nécessaire"
+fi
+
+# ── 10. Sitemap ───────────────────────────────────────────────────────────────
 step "Génération du sitemap XML"
 ARTISAN sitemap:generate
 ok "Sitemap généré"

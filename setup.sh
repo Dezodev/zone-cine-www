@@ -130,7 +130,57 @@ step "Migrations de base de données"
 ARTISAN migrate --force
 ok "Migrations terminées"
 
-# ── 8. Import du catalogue TMDB ───────────────────────────────────────────────
+# ── 8. Supervisor (queue worker) ─────────────────────────────────────────────
+step "Configuration du worker de queue (Supervisor)"
+
+QUEUE_CONNECTION=$(grep -E '^QUEUE_CONNECTION=' "$APP_DIR/.env" | cut -d '=' -f2 | tr -d '[:space:]' || echo "database")
+QUEUE_CONNECTION=${QUEUE_CONNECTION:-database}
+ok "Driver de queue détecté : $QUEUE_CONNECTION"
+
+if [ "$QUEUE_CONNECTION" = "database" ]; then
+    step "Création de la table de queue (database driver)"
+    if ! ARTISAN migrate:status 2>/dev/null | grep -q 'jobs'; then
+        ARTISAN queue:table
+        ARTISAN migrate --force
+        ok "Table de queue créée"
+    else
+        ok "Table de queue déjà présente"
+    fi
+fi
+
+SUPERVISOR_CONF="/etc/supervisor/conf.d/zone-cine-queue.conf"
+if [ ! -f "$SUPERVISOR_CONF" ]; then
+    cat > "$SUPERVISOR_CONF" <<CONF
+[program:zone-cine-queue]
+process_name=%(program_name)s_%(process_num)02d
+command=$PHP_BIN -d memory_limit=-1 $APP_DIR/artisan queue:work $QUEUE_CONNECTION --queue=tmdb-import --sleep=3 --tries=3 --max-jobs=500
+directory=$APP_DIR
+user=$PHP_USER
+autostart=true
+autorestart=true
+stopasgroup=true
+killasgroup=true
+numprocs=2
+redirect_stderr=true
+stdout_logfile=/var/log/zone-cine-queue.log
+stdout_logfile_maxbytes=10MB
+stopwaitsecs=60
+CONF
+    ok "Fichier $SUPERVISOR_CONF créé"
+else
+    ok "Config Supervisor déjà présente"
+fi
+
+if command -v supervisorctl >/dev/null 2>&1; then
+    supervisorctl reread
+    supervisorctl update
+    supervisorctl start zone-cine-queue:* 2>/dev/null || supervisorctl restart zone-cine-queue:* 2>/dev/null || true
+    ok "Worker de queue démarré"
+else
+    warn "supervisorctl introuvable — installez Supervisor puis lancez : supervisorctl reread && supervisorctl update"
+fi
+
+# ── 10. Import du catalogue TMDB ──────────────────────────────────────────────
 if [ "$SKIP_IMPORT" = false ]; then
     step "Import du catalogue TMDB (peut prendre plusieurs minutes)"
     ARTISAN tmdb:import-export --type=movies --min-popularity=10
@@ -140,12 +190,12 @@ else
     warn "Import TMDB ignoré (--skip-import)"
 fi
 
-# ── 9. Caches ─────────────────────────────────────────────────────────────────
+# ── 11. Caches ────────────────────────────────────────────────────────────────
 step "Reconstruction des caches (config, routes, vues)"
 ARTISAN optimize
 ok "Caches reconstruits"
 
-# ── 10. Sitemap ────────────────────────────────────────────────────────────────
+# ── 12. Sitemap ───────────────────────────────────────────────────────────────
 step "Génération du sitemap XML"
 ARTISAN sitemap:generate
 ok "Sitemap généré"
