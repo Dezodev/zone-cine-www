@@ -149,6 +149,7 @@ if [ "$QUEUE_CONNECTION" = "database" ]; then
 fi
 
 SUPERVISOR_CONF="/etc/supervisor/conf.d/zone-cine-queue.conf"
+mkdir -p "$(dirname "$SUPERVISOR_CONF")"
 if [ ! -f "$SUPERVISOR_CONF" ]; then
     cat > "$SUPERVISOR_CONF" <<CONF
 [program:zone-cine-queue]
