@@ -149,9 +149,9 @@ if [ "$QUEUE_CONNECTION" = "database" ]; then
 fi
 
 SUPERVISOR_CONF="/etc/supervisor/conf.d/zone-cine-queue.conf"
-mkdir -p "$(dirname "$SUPERVISOR_CONF")"
+sudo mkdir -p "$(dirname "$SUPERVISOR_CONF")"
 if [ ! -f "$SUPERVISOR_CONF" ]; then
-    cat > "$SUPERVISOR_CONF" <<CONF
+    sudo tee "$SUPERVISOR_CONF" > /dev/null <<CONF
 [program:zone-cine-queue]
 process_name=%(program_name)s_%(process_num)02d
 command=$PHP_BIN -d memory_limit=-1 $APP_DIR/artisan queue:work $QUEUE_CONNECTION --queue=tmdb-import --sleep=3 --tries=3 --max-jobs=500
@@ -173,12 +173,12 @@ else
 fi
 
 if command -v supervisorctl >/dev/null 2>&1; then
-    supervisorctl reread
-    supervisorctl update
-    supervisorctl start zone-cine-queue:* 2>/dev/null || supervisorctl restart zone-cine-queue:* 2>/dev/null || true
+    sudo supervisorctl reread
+    sudo supervisorctl update
+    sudo supervisorctl start zone-cine-queue:* 2>/dev/null || sudo supervisorctl restart zone-cine-queue:* 2>/dev/null || true
     ok "Worker de queue démarré"
 else
-    warn "supervisorctl introuvable — installez Supervisor puis lancez : supervisorctl reread && supervisorctl update"
+    warn "supervisorctl introuvable — installez Supervisor puis lancez : sudo supervisorctl reread && sudo supervisorctl update"
 fi
 
 # ── 10. Import du catalogue TMDB ──────────────────────────────────────────────
