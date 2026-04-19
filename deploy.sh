@@ -6,7 +6,7 @@ set -euo pipefail
 # ── Configuration ─────────────────────────────────────────────────────────────
 APP_DIR="/home/frightful2630/web/zone-cine.fr/public_html"     # Racine Laravel (HestiaCP)
 PHP_BIN="/usr/bin/php8.4"                                      # PHP 8.4 sur Debian/Ubuntu
-COMPOSER_BIN="$(command -v composer)"
+COMPOSER_BIN="$(command -v composer 2>/dev/null || true)"
 PNPM_BIN="$(command -v pnpm 2>/dev/null || echo '/usr/local/bin/pnpm')"
 PHP_USER="frightful2630"             # Utilisateur HestiaCP propriétaire du site
 PHP_GROUP="www-data"                 # Groupe HestiaCP (nginx/php-fpm)
@@ -66,7 +66,7 @@ echo -e "${BLUE}═════════════════════�
 
 # ── 1. Git pull ───────────────────────────────────────────────────────────────
 step "Mise à jour du code (git pull)"
-sudo -u "$PHP_USER" git -C "$APP_DIR" pull
+git -C "$APP_DIR" pull
 ok "Code mis à jour — $(git -C "$APP_DIR" log -1 --format='%h %s')"
 
 # ── 2. Mode maintenance ───────────────────────────────────────────────────────
