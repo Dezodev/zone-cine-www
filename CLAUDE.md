@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **Zone Ciné** — Laravel 12 aggregator for French-language cinema: films, series, streaming platforms. Data sourced entirely from the TMDB API.
 
-Stack: PHP 8.3, Laravel 12, MySQL/MariaDB, Redis (queues/cache), Vite + Tailwind CSS v4 + DaisyUI v5.
+Stack: PHP 8.4, Laravel 12, MySQL/MariaDB, Redis (queues/cache), Vite + Tailwind CSS v4 + DaisyUI v5.
 
 ## Environment
 
@@ -104,6 +104,17 @@ Routes use slugs (not IDs). The importer generates slugs via `Str::slug()`, appe
 
 ## Production notes
 
-- The Laravel scheduler must run via cron: `* * * * * cd /path/to/project && php artisan schedule:run >> /dev/null 2>&1`
+### Hosting
+
+- **VPS** : OVH, panel **HestiaCP**
+- **Utilisateur HestiaCP** : `frightful2630`
+- **Chemin du site** : `/home/frightful2630/web/zone-cine.fr/`
+- **Racine Laravel** : `/home/frightful2630/web/zone-cine.fr/public_html/` (le projet Laravel est déployé ici)
+- **Document root Nginx** : `/home/frightful2630/web/zone-cine.fr/public_html/public/` (le dossier `public/` de Laravel)
+- Structure HestiaCP standard : `cgi-bin/`, `document_errors/`, `logs/`, `private/`, `public_html/`, `stats/`
+
+### Scheduler & queues
+
+- The Laravel scheduler must run via cron: `* * * * * cd /home/frightful2630/web/zone-cine.fr/public_html && php artisan schedule:run >> /dev/null 2>&1`
 - Queue workers for `tmdb-import` should be managed by Supervisor in production.
 - TMDB API rate limit is ~40 req/s on the free plan; parallel workers help but are bounded by this.
