@@ -18,12 +18,12 @@ class HomeController extends Controller
         $nowPlaying = Movie::query()
             ->whereNotNull('release_date')
             ->where('release_date', '<=', now())
-            ->orderByDesc('popularity')
+            ->orderByDesc('weighted_score')
             ->limit(10)
             ->get();
 
         $popularShows = TvShow::query()
-            ->orderByDesc('popularity')
+            ->orderByDesc('weighted_score')
             ->limit(10)
             ->get();
 

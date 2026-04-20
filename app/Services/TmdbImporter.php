@@ -42,6 +42,7 @@ class TmdbImporter
                 'vote_average'     => $data['vote_average'] ?? 0,
                 'vote_count'       => $data['vote_count'] ?? 0,
                 'popularity'       => $data['popularity'] ?? 0,
+                'weighted_score'   => $this->weightedScore($data['vote_average'] ?? 0, $data['vote_count'] ?? 0, $data['release_date'] ?? null),
                 'budget'           => $data['budget'] ?? 0,
                 'revenue'          => $data['revenue'] ?? 0,
                 'adult'            => $data['adult'] ?? false,
@@ -84,6 +85,7 @@ class TmdbImporter
                 'vote_average'       => $data['vote_average'] ?? 0,
                 'vote_count'         => $data['vote_count'] ?? 0,
                 'popularity'         => $data['popularity'] ?? 0,
+                'weighted_score'     => $this->weightedScore($data['vote_average'] ?? 0, $data['vote_count'] ?? 0, $data['first_air_date'] ?? null),
             ]
         );
 
@@ -278,5 +280,19 @@ class TmdbImporter
     private function uniqueSlug(string $model, string $title, int $tmdbId): string
     {
         return Str::slug($title) . '-' . $tmdbId;
+    }
+
+    private function weightedScore(float $voteAverage, int $voteCount, ?string $releaseDate): float
+    {
+        $base = ($voteAverage * $voteCount) / ($voteCount + 1000);
+
+        if (! $releaseDate) {
+            return $base;
+        }
+
+        $yearsOld = now()->diffInYears(\Carbon\Carbon::parse($releaseDate));
+        $recencyBoost = 1 + max(0, (10 - $yearsOld) / 10) * 0.3;
+
+        return $base * $recencyBoost;
     }
 }

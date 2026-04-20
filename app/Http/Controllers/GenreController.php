@@ -17,7 +17,7 @@ class GenreController extends Controller
         );
 
         $movies = $genre->movies()
-            ->orderByDesc('popularity')
+            ->orderByDesc('weighted_score')
             ->paginate(24);
 
         return view('genres.movies', compact('genre', 'movies'));
@@ -33,7 +33,7 @@ class GenreController extends Controller
         );
 
         $shows = $genre->tvShows()
-            ->orderByDesc('popularity')
+            ->orderByDesc('weighted_score')
             ->paginate(24);
 
         return view('genres.tv', compact('genre', 'shows'));

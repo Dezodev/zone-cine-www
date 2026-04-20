@@ -23,7 +23,7 @@ class MovieController extends Controller
             ->when($request->langue, fn ($q) => $q->where('original_language', $request->langue))
             ->when($request->tri === 'date', fn ($q) => $q->orderByDesc('release_date'))
             ->when($request->tri === 'note', fn ($q) => $q->orderByDesc('vote_average'))
-            ->when(! $request->tri, fn ($q) => $q->orderByDesc('popularity'))
+            ->when(! $request->tri, fn ($q) => $q->orderByDesc('weighted_score'))
             ->paginate(25)
             ->withQueryString();
 
