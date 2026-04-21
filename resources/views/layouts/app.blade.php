@@ -16,6 +16,10 @@
   {!! JsonLd::generate() !!}
 
   @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+  @production
+  <script defer src="https://umami.dez.ovh/script.js" data-website-id="6fe3c13b-ad80-4b91-9983-92f2f0d5b2b2"></script>
+  @endproduction
 </head>
 <body>
 
