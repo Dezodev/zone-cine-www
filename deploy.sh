@@ -91,7 +91,7 @@ if [ "$SKIP_ASSETS" = false ]; then
     step "Compilation des assets frontend (pnpm)"
     NODE_BIN_DIR="$(dirname "$PNPM_BIN")"
     as_webuser env PATH="$NODE_BIN_DIR:$PATH" "$PNPM_BIN" --dir "$APP_DIR" install --frozen-lockfile --silent
-    as_webuser env PATH="$NODE_BIN_DIR:$PATH" "$PNPM_BIN" --dir "$APP_DIR" run build --silent
+    as_webuser env PATH="$NODE_BIN_DIR:$PATH" "$PNPM_BIN" --dir "$APP_DIR" run build
     ok "Assets compilés"
 else
     warn "Assets ignorés (--skip-assets)"
